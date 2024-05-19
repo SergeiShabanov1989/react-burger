@@ -16,7 +16,7 @@
 .constructor {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   overflow: scroll;
 }
 
@@ -24,6 +24,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  width: 100%;
 }
 
 .currency_wrapper {

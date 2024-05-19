@@ -21,7 +21,7 @@ export const BurgerIngredients = () => {
 
   return (
     <section className={`${ingredientsStyles.section} mr-10`}>
-      <h1 className={`${ingredientsStyles.text} text_type_main-large`}>
+      <h1 className={`${ingredientsStyles.text} text text_type_main-large mt-10 mb-5`}>
         Соберите бургер
       </h1>
       <div style={{ display: 'flex' }}>
@@ -37,7 +37,7 @@ export const BurgerIngredients = () => {
       </div>
       <div className={`${ingredientsStyles.container} mt-10`}>
         <h2
-          className={`${ingredientsStyles.text} text_type_main-medium`}
+          className={`${ingredientsStyles.text} text text_type_main-medium mt-10 mb-6`}
           id="one"
         >
           Булки
@@ -53,7 +53,7 @@ export const BurgerIngredients = () => {
           ))}
         </div>
         <h2
-          className={`${ingredientsStyles.text} text_type_main-medium`}
+          className={`${ingredientsStyles.text} text text_type_main-medium mt-10 mb-6`}
           id="two"
         >
           Соусы
@@ -69,7 +69,7 @@ export const BurgerIngredients = () => {
           ))}
         </div>
         <h2
-          className={`${ingredientsStyles.text} text_type_main-medium`}
+          className={`${ingredientsStyles.text} text text_type_main-medium mt-10 mb-6`}
           id="three"
         >
           Начинки

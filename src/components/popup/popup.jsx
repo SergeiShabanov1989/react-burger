@@ -18,7 +18,7 @@ export const Popup = (props) => {
   };
 
   return (
-    <div className={`${popupStyles.popup} ${popupStyles.popup_opened}`}>
+    <div className={`${popupStyles.popup}`}>
       <div className={`${popupStyles.popup_container}`}>
         <CloseIcon type="primary" />
         <h3 className="text text_type_main-large">Детали ингредиента</h3>

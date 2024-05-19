@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   ConstructorElement,
   Button,
@@ -58,7 +58,7 @@ export const BurgerConstructor = () => {
           ))}
         </div>
       </div>
-      <div className={`${ConstructorStyles.buy_button_wrapper} mt-10`}>
+      <div className={`${ConstructorStyles.buy_button_wrapper} pr-10 mt-10`}>
         <div className={`${ConstructorStyles.currency_wrapper} mr-10`}>
           <p
             className={`${ConstructorStyles.text} text_type_digits-medium mr-2`}
@@ -73,4 +73,12 @@ export const BurgerConstructor = () => {
       </div>
     </section>
   );
+};
+
+BurgerConstructor.propTypes = {
+  bunsIngredients: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+  }).isRequired,
 };

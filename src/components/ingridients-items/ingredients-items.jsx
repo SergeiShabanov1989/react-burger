@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   CurrencyIcon,
   Counter,
@@ -21,3 +22,9 @@ export const IngredientsItems = ({ image, name, price }) => {
     </div>
   );
 };
+
+IngredientsItems.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+}
