@@ -1,14 +1,20 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import {
   ConstructorElement,
   Button,
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import { Modal } from '../modal/modal';
+import { OrderDetails } from '../order-details/order-details';
 
 import ConstructorStyles from './burger-constructor.module.css';
 
 export const BurgerConstructor = ({ isIngredients }) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
   const bunsIngredients = isIngredients.filter(
     (ingredient) => ingredient.name === 'Краторная булка N-200i'
   );
@@ -16,7 +22,7 @@ export const BurgerConstructor = ({ isIngredients }) => {
     (ingredient) => ingredient.type === 'main' || 'sauce'
   );
 
-  const entireCurrency = isIngredients.reduce(
+  const fullPrice = isIngredients.reduce(
     (acc, number) => acc + number.price,
     0
   );
@@ -37,7 +43,10 @@ export const BurgerConstructor = ({ isIngredients }) => {
         </div>
         <div className={`${ConstructorStyles.constructor} mb-4`}>
           {mainIngredients.map((ingredient) => (
-            <div key={ingredient._id} className={`${ConstructorStyles.ingredient_wrapper} mr-2`}>
+            <div
+              key={ingredient._id}
+              className={`${ConstructorStyles.ingredient_wrapper} mr-2`}
+            >
               <DragIcon type="primary" />
               <ConstructorElement
                 text={ingredient.name}
@@ -64,14 +73,26 @@ export const BurgerConstructor = ({ isIngredients }) => {
           <p
             className={`${ConstructorStyles.text} text_type_digits-medium mr-2`}
           >
-            {entireCurrency}
+            {fullPrice}
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large">
+        <Button
+          htmlType="button"
+          type="primary"
+          size="large"
+          onClick={() => setIsOpenModal(true)}
+        >
           Оформить заказ
         </Button>
       </div>
+      {isOpenModal && (
+        <ModalOverlay setIsOpenModal={setIsOpenModal}>
+          <Modal setIsOpenModal={setIsOpenModal}>
+            <OrderDetails />
+          </Modal>
+        </ModalOverlay>
+      )}
     </section>
   );
 };

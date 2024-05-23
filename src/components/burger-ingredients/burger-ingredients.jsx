@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
@@ -102,7 +102,7 @@ export const BurgerIngredients = ({ isIngredients }) => {
       </div>
 
       {isChoseIngredient && isOpenModal && (
-        <ModalOverlay>
+        <ModalOverlay setIsOpenModal={setIsOpenModal}>
           <Modal setIsOpenModal={setIsOpenModal}>
             <IngredientDetails ingredient={isChoseIngredient} />
           </Modal>

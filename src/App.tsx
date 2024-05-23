@@ -45,8 +45,6 @@ function App() {
       });
   }, []);
 
-  console.log(state.isIngredients);
-
   return (
     <>
       <AppHeader />

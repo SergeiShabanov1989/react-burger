@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import ingredientDetailsStyles from './ingredient-details.module.css';
 
 export const IngredientDetails = (isChoseIngredient) => {
@@ -11,7 +12,7 @@ export const IngredientDetails = (isChoseIngredient) => {
       <img src={image_large} alt={ingredientDetailsStyles.name} />
       <h4 className="text text_type_main-medium">{name}</h4>
       <ul className={ingredientDetailsStyles.calories_wrapper}>
-        <li>
+        <li className={ingredientDetailsStyles.info}>
           <p className="text text_type_main-default text_color_inactive">
             Калории,ккал:
           </p>
@@ -19,7 +20,7 @@ export const IngredientDetails = (isChoseIngredient) => {
             {calories}
           </p>
         </li>
-        <li>
+        <li className={ingredientDetailsStyles.info}>
           <p className="text text_type_main-default text_color_inactive">
             Белки, г:
           </p>
@@ -27,7 +28,7 @@ export const IngredientDetails = (isChoseIngredient) => {
             {proteins}
           </p>
         </li>
-        <li>
+        <li className={ingredientDetailsStyles.info}>
           <p className="text text_type_main-default text_color_inactive">
             Жиры, г:
           </p>
@@ -35,7 +36,7 @@ export const IngredientDetails = (isChoseIngredient) => {
             {fat}
           </p>
         </li>
-        <li>
+        <li className={ingredientDetailsStyles.info}>
           <p className="text text_type_main-default text_color_inactive">
             Углеводы, г:
           </p>
@@ -46,4 +47,17 @@ export const IngredientDetails = (isChoseIngredient) => {
       </ul>
     </div>
   );
+};
+
+IngredientDetails.propTypes = {
+  isChoseIngredient: PropTypes.shape({
+    ingredient: PropTypes.shape({
+      name: PropTypes.string,
+      image_large: PropTypes.string,
+      calories: PropTypes.number,
+      proteins: PropTypes.number,
+      fat: PropTypes.number,
+      carbohydrates: PropTypes.number,
+    }),
+  }),
 };
