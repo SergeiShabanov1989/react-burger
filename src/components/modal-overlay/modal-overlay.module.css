@@ -4,12 +4,12 @@
   position: fixed;
   top: 0;
   left: 0;
-  visibility: hidden;
+  visibility: visible;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.6) ;
-  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 1;
   transition:
     opacity 0.5s,
     visibility 0.5s;

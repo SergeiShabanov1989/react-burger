@@ -2,8 +2,8 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { AppHeader } from './components/app-header/app-header';
 import { Main } from './components/main/main';
-import { ModalOverlay } from './components/modal-overlay/modal-overlay';
-import { Modal } from './components/modal/modal';
+
+const URL = 'https://norma.nomoreparties.space/api/ingredients';
 
 function App() {
   const [state, setState] = useState({
@@ -11,8 +11,6 @@ function App() {
     isError: false,
     isIngredients: [],
   });
-
-  const URL = 'https://norma.nomoreparties.space/api/ingredients';
 
   useEffect(() => {
     setState({
@@ -57,11 +55,6 @@ function App() {
       ) : (
         <Main isIngredients={state.isIngredients} />
       )}
-      <ModalOverlay>
-        <Modal>
-          <p>Произошла ошибка</p>
-        </Modal>
-      </ModalOverlay>
     </>
   );
 }

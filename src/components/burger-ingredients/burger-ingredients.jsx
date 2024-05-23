@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
-import { Popup } from '../popup/popup';
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import { Modal } from '../modal/modal';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = ({ isIngredients }) => {
   const [current, setCurrent] = useState('one');
+  const [isChoseIngredient, setIsChoseIngredient] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const bunsIngredients = isIngredients.filter(
     (ingredient) => ingredient.type === 'bun'
@@ -51,6 +55,9 @@ export const BurgerIngredients = ({ isIngredients }) => {
               name={ingredient.name}
               image={ingredient.image}
               price={ingredient.price}
+              setIsChoseIngredient={setIsChoseIngredient}
+              ingredient={ingredient}
+              setIsOpenModal={setIsOpenModal}
             />
           ))}
         </div>
@@ -67,6 +74,9 @@ export const BurgerIngredients = ({ isIngredients }) => {
               name={ingredient.name}
               image={ingredient.image}
               price={ingredient.price}
+              ingredient={ingredient}
+              setIsChoseIngredient={setIsChoseIngredient}
+              setIsOpenModal={setIsOpenModal}
             />
           ))}
         </div>
@@ -83,12 +93,21 @@ export const BurgerIngredients = ({ isIngredients }) => {
               name={ingredient.name}
               image={ingredient.image}
               price={ingredient.price}
+              ingredient={ingredient}
+              setIsChoseIngredient={setIsChoseIngredient}
+              setIsOpenModal={setIsOpenModal}
             />
           ))}
         </div>
       </div>
 
-      <Popup />
+      {isChoseIngredient && isOpenModal && (
+        <ModalOverlay>
+          <Modal setIsOpenModal={setIsOpenModal}>
+            <IngredientDetails ingredient={isChoseIngredient} />
+          </Modal>
+        </ModalOverlay>
+      )}
     </section>
   );
 };
