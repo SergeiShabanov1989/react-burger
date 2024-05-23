@@ -5,19 +5,18 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { selectedIngredients } from '../utils/data';
 
 import ConstructorStyles from './burger-constructor.module.css';
 
-export const BurgerConstructor = () => {
-  const bunsIngredients = selectedIngredients.filter(
-    (ingredient) => ingredient.type === 'bun'
+export const BurgerConstructor = ({ isIngredients }) => {
+  const bunsIngredients = isIngredients.filter(
+    (ingredient) => ingredient.name === 'Краторная булка N-200i'
   );
-  const mainIngredients = selectedIngredients.filter(
-    (ingredient) => ingredient.type === 'main'
+  const mainIngredients = isIngredients.filter(
+    (ingredient) => ingredient.type === 'main' || 'sauce'
   );
 
-  const entireCurrency = selectedIngredients.reduce(
+  const entireCurrency = isIngredients.reduce(
     (acc, number) => acc + number.price,
     0
   );
@@ -28,6 +27,7 @@ export const BurgerConstructor = () => {
         <div className={`${ConstructorStyles.item_wrapper} pl-6 mb-4`}>
           {bunsIngredients.map((ingredient) => (
             <ConstructorElement
+              key={ingredient._id}
               text={`${ingredient.name} (верх)`}
               price={ingredient.price}
               thumbnail={ingredient.image}
@@ -37,7 +37,7 @@ export const BurgerConstructor = () => {
         </div>
         <div className={`${ConstructorStyles.constructor} mb-4`}>
           {mainIngredients.map((ingredient) => (
-            <div className={`${ConstructorStyles.ingredient_wrapper} mr-2`}>
+            <div key={ingredient._id} className={`${ConstructorStyles.ingredient_wrapper} mr-2`}>
               <DragIcon type="primary" />
               <ConstructorElement
                 text={ingredient.name}
@@ -50,7 +50,8 @@ export const BurgerConstructor = () => {
         <div className={`${ConstructorStyles.item_wrapper} pl-6`}>
           {bunsIngredients.map((ingredient) => (
             <ConstructorElement
-              text={`${ingredient.name} (верх)`}
+              key={ingredient._id}
+              text={`${ingredient.name} (низ)`}
               price={ingredient.price}
               thumbnail={ingredient.image}
               isLocked={true}
@@ -76,9 +77,19 @@ export const BurgerConstructor = () => {
 };
 
 BurgerConstructor.propTypes = {
-  bunsIngredients: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-  }).isRequired,
+  isIngredients: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      type: PropTypes.string,
+      proteins: PropTypes.number,
+      fat: PropTypes.number,
+      carbohydrates: PropTypes.number,
+      calories: PropTypes.number,
+      price: PropTypes.number,
+      image: PropTypes.string,
+      image_mobile: PropTypes.string,
+      image_large: PropTypes.string,
+    })
+  ),
 };

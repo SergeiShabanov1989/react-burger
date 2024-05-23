@@ -5,11 +5,10 @@
 .container {
   height: 750px;
   overflow: scroll;
+  scroll-snap-type: y mandatory;
 }
 
 .items_container {
   display: flex;
   flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
 }

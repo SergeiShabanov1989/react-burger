@@ -1,27 +1,29 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
-import { burgerStaticIngredients } from '../utils/data';
 import { Popup } from '../popup/popup';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = () => {
-  const bunsIngredients = burgerStaticIngredients.filter(
+export const BurgerIngredients = ({ isIngredients }) => {
+  const [current, setCurrent] = useState('one');
+
+  const bunsIngredients = isIngredients.filter(
     (ingredient) => ingredient.type === 'bun'
   );
-  const mainIngredients = burgerStaticIngredients.filter(
+  const mainIngredients = isIngredients.filter(
     (ingredient) => ingredient.type === 'main'
   );
-  const sauceIngredients = burgerStaticIngredients.filter(
+  const sauceIngredients = isIngredients.filter(
     (ingredient) => ingredient.type === 'sauce'
   );
 
-  const [current, setCurrent] = useState('one');
-
   return (
     <section className={`${ingredientsStyles.section} mr-10`}>
-      <h1 className={`${ingredientsStyles.text} text text_type_main-large mt-10 mb-5`}>
+      <h1
+        className={`${ingredientsStyles.text} text text_type_main-large mt-10 mb-5`}
+      >
         Соберите бургер
       </h1>
       <div style={{ display: 'flex' }}>
@@ -42,7 +44,7 @@ export const BurgerIngredients = () => {
         >
           Булки
         </h2>
-        <div className={ingredientsStyles.items_container}>
+        <div className={`${ingredientsStyles.items_container}`}>
           {bunsIngredients.map((ingredient) => (
             <IngredientsItems
               key={ingredient._id}
@@ -89,4 +91,22 @@ export const BurgerIngredients = () => {
       <Popup />
     </section>
   );
+};
+
+BurgerIngredients.propTypes = {
+  isIngredients: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      type: PropTypes.string,
+      proteins: PropTypes.number,
+      fat: PropTypes.number,
+      carbohydrates: PropTypes.number,
+      calories: PropTypes.number,
+      price: PropTypes.number,
+      image: PropTypes.string,
+      image_mobile: PropTypes.string,
+      image_large: PropTypes.string,
+    })
+  ),
 };
