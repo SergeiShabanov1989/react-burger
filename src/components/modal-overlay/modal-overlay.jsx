@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import overlayStyles from './modal-overlay.module.css';
 
 export const ModalOverlay = ({ children, setIsOpenModal }) => {
@@ -9,4 +10,9 @@ export const ModalOverlay = ({ children, setIsOpenModal }) => {
       {children}
     </div>
   );
+};
+
+ModalOverlay.propTypes = {
+  children: PropTypes.node,
+  setIsOpenModal: PropTypes.func,
 };

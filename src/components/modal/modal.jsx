@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import modalStyles from './modal.module.css';
@@ -34,4 +35,9 @@ export const Modal = ({ children, setIsOpenModal }) => {
     </>,
     modalRoot
   );
+};
+
+Modal.propTypes = {
+  children: PropTypes.node,
+  setIsOpenModal: PropTypes.func,
 };

@@ -13,43 +13,56 @@ function App() {
   });
 
   useEffect(() => {
-    setState({
-      ...state,
-      isError: false,
-      isLoading: true,
-    });
-    fetch(URL)
-      .then((response) => response.json())
-      .then((ingredients) => {
-        if (ingredients.success) {
-          setState({
-            ...state,
-            isLoading: false,
-            isError: false,
-            isIngredients: ingredients.data,
-          });
-        } else {
-          setState({
-            ...state,
-            isLoading: false,
-            isError: true,
-          });
-        }
-      })
-      .catch((e) => {
+    getIngredientsFromServer();
+  }, []);
+
+  const getIngredientsFromServer = async () => {
+    try {
+      setState({
+        ...state,
+        isError: false,
+        isLoading: true,
+      });
+      const res = await fetch(URL);
+      const ingredients = await res.json();
+      if (ingredients.success) {
+        setState({
+          ...state,
+          isLoading: false,
+          isError: false,
+          isIngredients: ingredients.data,
+        });
+      } else {
         setState({
           ...state,
           isLoading: false,
           isError: true,
         });
+      }
+    } catch (err) {
+      setState({
+        ...state,
+        isLoading: false,
+        isError: true,
       });
-  }, []);
+    }
+  };
 
   return (
     <>
       <AppHeader />
       {state.isLoading ? (
         <div className="preloader"></div>
+      ) : state.isError ? (
+        <div className="error">
+          <h1 className="text text_type_main-large mb-10">Произошла ошибка!</h1>
+          <button
+            className="red-button text text_type_main-small"
+            onClick={getIngredientsFromServer}
+          >
+            Попробовать еще раз
+          </button>
+        </div>
       ) : (
         <Main isIngredients={state.isIngredients} />
       )}
