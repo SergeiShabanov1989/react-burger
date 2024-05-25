@@ -1,5 +1,4 @@
 .header_container {
-  width: 100vw;
   background-color: #1c1c21;
   display: flex;
   justify-content: center;
@@ -25,8 +24,7 @@
 }
 
 .link {
-  margin: 0;
-  padding: 0;
+  cursor: pointer;
   display: flex;
   align-items: center;
   text-decoration: none;

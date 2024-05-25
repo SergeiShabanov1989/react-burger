@@ -2,24 +2,24 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
-import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { ingredientType } from '../utils/prop-types';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = ({ isIngredients }) => {
+export const BurgerIngredients = ({ ingredients }) => {
   const [current, setCurrent] = useState('one');
-  const [isChoseIngredient, setIsChoseIngredient] = useState(false);
+  const [choseIngredient, setChoseIngredient] = useState({});
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const bunsIngredients = isIngredients.filter(
+  const bunsIngredients = ingredients.filter(
     (ingredient) => ingredient.type === 'bun'
   );
-  const mainIngredients = isIngredients.filter(
+  const mainIngredients = ingredients.filter(
     (ingredient) => ingredient.type === 'main'
   );
-  const sauceIngredients = isIngredients.filter(
+  const sauceIngredients = ingredients.filter(
     (ingredient) => ingredient.type === 'sauce'
   );
 
@@ -52,10 +52,7 @@ export const BurgerIngredients = ({ isIngredients }) => {
           {bunsIngredients.map((ingredient) => (
             <IngredientsItems
               key={ingredient._id}
-              name={ingredient.name}
-              image={ingredient.image}
-              price={ingredient.price}
-              setIsChoseIngredient={setIsChoseIngredient}
+              setChoseIngredient={setChoseIngredient}
               ingredient={ingredient}
               setIsOpenModal={setIsOpenModal}
             />
@@ -71,11 +68,8 @@ export const BurgerIngredients = ({ isIngredients }) => {
           {sauceIngredients.map((ingredient) => (
             <IngredientsItems
               key={ingredient._id}
-              name={ingredient.name}
-              image={ingredient.image}
-              price={ingredient.price}
               ingredient={ingredient}
-              setIsChoseIngredient={setIsChoseIngredient}
+              setChoseIngredient={setChoseIngredient}
               setIsOpenModal={setIsOpenModal}
             />
           ))}
@@ -90,42 +84,23 @@ export const BurgerIngredients = ({ isIngredients }) => {
           {mainIngredients.map((ingredient) => (
             <IngredientsItems
               key={ingredient._id}
-              name={ingredient.name}
-              image={ingredient.image}
-              price={ingredient.price}
               ingredient={ingredient}
-              setIsChoseIngredient={setIsChoseIngredient}
+              setChoseIngredient={setChoseIngredient}
               setIsOpenModal={setIsOpenModal}
             />
           ))}
         </div>
       </div>
 
-      {isChoseIngredient && isOpenModal && (
-        <ModalOverlay setIsOpenModal={setIsOpenModal}>
-          <Modal setIsOpenModal={setIsOpenModal}>
-            <IngredientDetails ingredient={isChoseIngredient} />
-          </Modal>
-        </ModalOverlay>
+      {isOpenModal && (
+        <Modal setIsOpenModal={setIsOpenModal}>
+          <IngredientDetails choseIngredient={choseIngredient} />
+        </Modal>
       )}
     </section>
   );
 };
 
 BurgerIngredients.propTypes = {
-  isIngredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-    })
-  ),
+  ingredients: PropTypes.arrayOf(ingredientType.isRequired).isRequired,
 };

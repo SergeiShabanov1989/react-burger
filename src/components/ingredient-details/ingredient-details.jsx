@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
+import { ingredientType } from '../utils/prop-types';
+
 import ingredientDetailsStyles from './ingredient-details.module.css';
 
-export const IngredientDetails = (isChoseIngredient) => {
+export const IngredientDetails = (choseIngredient) => {
   const { name, image_large, calories, proteins, fat, carbohydrates } =
-    isChoseIngredient.ingredient;
+    choseIngredient.choseIngredient;
   return (
     <div
       className={`${ingredientDetailsStyles.ingredient_wrapper} mt-15 mb-15`}
@@ -50,14 +52,5 @@ export const IngredientDetails = (isChoseIngredient) => {
 };
 
 IngredientDetails.propTypes = {
-  isChoseIngredient: PropTypes.shape({
-    ingredient: PropTypes.shape({
-      name: PropTypes.string,
-      image_large: PropTypes.string,
-      calories: PropTypes.number,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-    }),
-  }),
+  choseIngredient: PropTypes.shape(ingredientType.isRequired).isRequired,
 };

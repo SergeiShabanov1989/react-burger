@@ -6,26 +6,23 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
+import { ingredientType } from '../utils/prop-types';
 
 import ConstructorStyles from './burger-constructor.module.css';
 
-export const BurgerConstructor = ({ isIngredients }) => {
+export const BurgerConstructor = ({ ingredients }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const bunsIngredients = isIngredients.filter(
+  const bunsIngredients = ingredients.filter(
     (ingredient) => ingredient.name === 'Краторная булка N-200i'
   );
-  const mainIngredients = isIngredients.filter(
-    (ingredient) => ingredient.type === 'main' || 'sauce'
+  const mainIngredients = ingredients.filter(
+    (ingredient) => ingredient.type !== 'bun'
   );
 
-  const fullPrice = isIngredients.reduce(
-    (acc, number) => acc + number.price,
-    0
-  );
+  const fullPrice = ingredients.reduce((acc, number) => acc + number.price, 0);
 
   return (
     <section className={`${ConstructorStyles.section} mt-25`}>
@@ -87,30 +84,14 @@ export const BurgerConstructor = ({ isIngredients }) => {
         </Button>
       </div>
       {isOpenModal && (
-        <ModalOverlay setIsOpenModal={setIsOpenModal}>
-          <Modal setIsOpenModal={setIsOpenModal}>
-            <OrderDetails />
-          </Modal>
-        </ModalOverlay>
+        <Modal setIsOpenModal={setIsOpenModal}>
+          <OrderDetails />
+        </Modal>
       )}
     </section>
   );
 };
 
 BurgerConstructor.propTypes = {
-  isIngredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-    })
-  ),
+  ingredients: PropTypes.arrayOf(ingredientType.isRequired).isRequired,
 };

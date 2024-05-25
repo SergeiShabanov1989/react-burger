@@ -3,36 +3,36 @@ import {
   CurrencyIcon,
   Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import IngredientsItemsStyles from './ingredients-items.module.css';
+import { ingredientType } from '../utils/prop-types';
+
+import ingredientsItemsStyles from './ingredients-items.module.css';
 
 export const IngredientsItems = ({
-  image,
-  name,
-  price,
-  setIsChoseIngredient,
+  setChoseIngredient,
   ingredient,
   setIsOpenModal,
 }) => {
+  const { image, name, price } = ingredient;
   const handleOnClick = () => {
-    setIsChoseIngredient(ingredient);
+    setChoseIngredient(ingredient);
     setIsOpenModal(true);
   };
   return (
     <div
-      className={`${IngredientsItemsStyles.container} ml-4 mr-6 mt-4`}
+      className={`${ingredientsItemsStyles.container} ml-4 mr-6 mt-4`}
       onClick={handleOnClick}
     >
       <Counter
         count={1}
         size="small"
-        extraClass={IngredientsItemsStyles.count}
+        extraClass={ingredientsItemsStyles.count}
       />
       <img
         src={image}
         alt={name}
-        className={`${IngredientsItemsStyles.image} ml-4 mr-4`}
+        className={`${ingredientsItemsStyles.image} ml-4 mr-4`}
       />
-      <div className={IngredientsItemsStyles.price_container}>
+      <div className={ingredientsItemsStyles.price_container}>
         <p className="text text_type_digits-default mt-1 mb-1 pr-2">{price}</p>
         <CurrencyIcon type="primary" />
       </div>
@@ -42,22 +42,7 @@ export const IngredientsItems = ({
 };
 
 IngredientsItems.propTypes = {
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  setIsChoseIngredient: PropTypes.func,
-  ingredient: PropTypes.shape({
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
-    price: PropTypes.number,
-    image: PropTypes.string,
-    image_mobile: PropTypes.string,
-    image_large: PropTypes.string,
-  }),
-  setIsOpenModal: PropTypes.func,
+  setChoseIngredient: PropTypes.func.isRequired,
+  ingredient: PropTypes.shape(ingredientType.isRequired),
+  setIsOpenModal: PropTypes.func.isRequired,
 };

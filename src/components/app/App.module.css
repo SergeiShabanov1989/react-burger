@@ -1,21 +1,3 @@
-html {
-  scrollbar-color: auto !important;
-}
-::-webkit-scrollbar {
-  width: 10px !important;
-  height: 0 !important;
-}
-::-webkit-scrollbar-track {
-  background: #2f2f37 !important;
-  width: 4px !important;
-}
-::-webkit-scrollbar-thumb {
-  background: #8585ad !important;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #5f5fa5 !important;
-}
-
 .body {
   min-width: 320px;
   background-color: #131316;
@@ -24,7 +6,7 @@ html {
 }
 
 .preloader {
-  background: url('./images/25.svg') no-repeat center center;
+  background: url('../../images/preloader.svg') no-repeat center center;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -39,7 +21,7 @@ html {
   flex-direction: column;
 }
 
-.red-button {
+.red_button {
   width: 260px;
   height: 50px;
   background-color: #d44d4d;
