@@ -24,14 +24,15 @@ export const AppHeader = () => {
               </a>
             </li>
             <li className={`${headerStyles.item} pb-5 pt-5`}>
-              <div className={headerStyles.link}>
+              {/* eslint-disable-next-line */}
+              <a className={headerStyles.link}>
                 <ListIcon type="primary" />
                 <p
                   className={`${headerStyles.link_text} text text_type_main-default pl-2`}
                 >
                   Лента заказов
                 </p>
-              </div>
+              </a>
             </li>
           </ul>
         </nav>
@@ -39,14 +40,15 @@ export const AppHeader = () => {
         <nav className={headerStyles.menu}>
           <ul className={headerStyles.list}>
             <li className={`${headerStyles.item} pb-5 pt-5`}>
-              <div className={headerStyles.link}>
+              {/* eslint-disable-next-line */}
+              <a className={headerStyles.link}>
                 <ProfileIcon type="primary" />
                 <p
                   className={`${headerStyles.link_text} text text_type_main-default pl-2`}
                 >
                   Личный кабинет
                 </p>
-              </div>
+              </a>
             </li>
           </ul>
         </nav>
