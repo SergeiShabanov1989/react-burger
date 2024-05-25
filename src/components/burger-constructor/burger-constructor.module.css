@@ -1,0 +1,47 @@
+.section {
+  height: 850px;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.constructor_wrapper {
+  display: flex;
+  flex-direction: column;
+  max-height: 680px;
+}
+
+.constructor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.buy_button_wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.currency_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item_wrapper {
+  height: 80px;
+}
+
+.ingredient_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
