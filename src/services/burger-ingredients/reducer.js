@@ -3,13 +3,16 @@ import { getIngredients } from './actions';
 
 const initialState = {
   ingredients: [],
-  loading: false,
-  error: false,
+  isLoading: false,
+  isError: false,
 };
 
 export const getIngredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
+  selectors: {
+    getAllIngredients: (state) => state.ingredients,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.pending, (state) => {
@@ -17,7 +20,7 @@ export const getIngredientsSlice = createSlice({
         state.error = false;
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
-        state.ingredients = action.payload;
+        state.ingredients = action.payload.data;
         state.loading = false;
         state.error = false;
       })
@@ -27,3 +30,5 @@ export const getIngredientsSlice = createSlice({
       });
   },
 });
+
+export const { getAllIngredients } = getIngredientsSlice.selectors;

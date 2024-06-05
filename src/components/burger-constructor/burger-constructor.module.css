@@ -19,6 +19,7 @@
   gap: 16px;
   overflow: scroll;
   scroll-snap-type: y mandatory;
+  min-height: 50px
 }
 
 .buy_button_wrapper {
@@ -44,4 +45,5 @@
   align-items: center;
   cursor: pointer;
   scroll-snap-align: start;
+  height: 80px;
 }
