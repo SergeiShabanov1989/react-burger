@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
@@ -75,4 +75,6 @@ export const ConstructorIngredients = ({ ingredient, index, id }) => {
 
 ConstructorIngredients.propTypes = {
   ingredient: PropTypes.shape(ingredientType.isRequired),
+  index: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };

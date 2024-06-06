@@ -1,18 +1,20 @@
+import { useSelector } from 'react-redux';
 import orderDetailsStyles from './order-details.module.css';
 import imageDone from '../../images/done.png';
 
 export const OrderDetails = () => {
+  const { order } = useSelector((state) => state.constructorIngredients);
   return (
     <div className={`${orderDetailsStyles.order_wrapper} mt-15 mb-15`}>
       <p
         className={`${orderDetailsStyles.order_number} text text_type_digits-large mb-8`}
       >
-        034536
+        {!order ? 0 : order.order.number}
       </p>
       <h1
         className={`${orderDetailsStyles.order_text} text text_type_main-medium mb-10`}
       >
-        идентификатор заказа
+        {order ? 'Идентификатор заказа' : 'произошла ошибка, повторите заказ'}
       </h1>
       <img
         src={imageDone}

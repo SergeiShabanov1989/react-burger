@@ -7,3 +7,13 @@ export const checkResponse = (res) => {
 export const getIngredientsFromServer = async () => {
   return fetch(`${BASE_URL}/ingredients`).then(checkResponse);
 };
+
+export const sendOrderToServer = async (order) => {
+  return fetch(`${BASE_URL}/orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(order),
+  }).then(checkResponse);
+};

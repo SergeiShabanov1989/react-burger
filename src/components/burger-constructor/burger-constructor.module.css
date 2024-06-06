@@ -52,3 +52,10 @@
   background-color: rgba(128, 255, 134, 0.397);
   border-radius: 30px;
 }
+
+.empty_item {
+  height: 80px;
+  width: 465px;
+  background-color: rgba(83, 83, 83, 0.397);
+  border-radius: 30px;
+}

@@ -10,7 +10,6 @@ import {
   setViewableIngredient,
   setIsModalIngredientOpen,
 } from '../../services/viewable-ingredient/reducer';
-import { setConstructorIngredients } from '../../services/constructor-ingredients/reducer';
 
 import ingredientsItemsStyles from './ingredients-items.module.css';
 
@@ -34,7 +33,6 @@ export const IngredientsItems = ({ ingredient }) => {
 
   const handleOnClick = () => {
     dispatch(setViewableIngredient(ingredient));
-    dispatch(setConstructorIngredients(ingredient));
     dispatch(setIsModalIngredientOpen(true));
   };
   return (

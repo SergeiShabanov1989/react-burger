@@ -11,6 +11,7 @@ import { ConstructorIngredients } from '../constructor-ingredients/constructor-i
 import { setIsModalOrderOpen } from '../../services/order-details/reducer';
 import { ingredientsPriceSelector } from '../../services/constructor-ingredients/selectors';
 import { setConstructorIngredients } from '../../services/constructor-ingredients/reducer';
+import { sendOrder } from '../../services/constructor-ingredients/actions';
 
 import ConstructorStyles from './burger-constructor.module.css';
 
@@ -21,6 +22,7 @@ export const BurgerConstructor = () => {
     (state) => state.constructorIngredients
   );
   const fullPriceIngredients = useSelector(ingredientsPriceSelector);
+
   const [{ isHover }, dropTarget] = useDrop({
     accept: ['main', 'sauce', 'bun'],
     drop(itemId) {
@@ -30,6 +32,14 @@ export const BurgerConstructor = () => {
       isHover: monitor.isOver(),
     }),
   });
+
+  const submitOrder = () => {
+    dispatch(setIsModalOrderOpen(true));
+    const pushOrder = constructorIngredients.map(
+      (ingredient) => ingredient._id
+    );
+    dispatch(sendOrder({ ingredients: pushOrder }));
+  };
 
   return (
     <section className={`${ConstructorStyles.section} mt-25`}>
@@ -47,7 +57,7 @@ export const BurgerConstructor = () => {
               isLocked={true}
             />
           ) : (
-            <ConstructorElement />
+            <div className={`${ConstructorStyles.empty_item} pl-6 mb-4`}></div>
           )}
         </div>
         <div className={`${ConstructorStyles.constructor}  mb-4`}>
@@ -71,7 +81,7 @@ export const BurgerConstructor = () => {
               isLocked={true}
             />
           ) : (
-            <ConstructorElement />
+            <div className={`${ConstructorStyles.empty_item} pl-6 mb-4`}></div>
           )}
         </div>
       </div>
@@ -89,7 +99,9 @@ export const BurgerConstructor = () => {
           htmlType="button"
           type="primary"
           size="large"
-          onClick={() => dispatch(setIsModalOrderOpen(true))}
+          onClick={() => {
+            submitOrder();
+          }}
         >
           Оформить заказ
         </Button>
