@@ -19,12 +19,9 @@ export const IngredientsItems = ({ ingredient }) => {
   const { constructorIngredients, buns } = useSelector(
     (state) => state.constructorIngredients
   );
-  const [{isDrag}, dragRef] = useDrag({
-    type: "ingredient",
+  const [, dragRef] = useDrag({
+    type: ingredient.type,
     item: ingredient,
-    collect: monitor => ({
-      isDrag: monitor.isDragging()
-  })
   });
 
   const countBuns = buns !== null && buns._id === ingredient._id ? 2 : 0;
@@ -41,7 +38,6 @@ export const IngredientsItems = ({ ingredient }) => {
     dispatch(setIsModalIngredientOpen(true));
   };
   return (
-    !isDrag && 
     <div
       className={`${ingredientsItemsStyles.container} ml-4 mr-6 mt-4`}
       onClick={handleOnClick}

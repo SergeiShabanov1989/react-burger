@@ -33,8 +33,13 @@ export const constructorIngredientsSlice = createSlice({
         );
       },
     },
+    moveIngredient: {
+      reducer: (state, action) => {
+        state.constructorIngredients = action.payload;
+      },
+    },
   },
 });
 
-export const { setConstructorIngredients, deleteIngredients } =
+export const { setConstructorIngredients, deleteIngredients, moveIngredient } =
   constructorIngredientsSlice.actions;

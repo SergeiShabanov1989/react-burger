@@ -1,18 +1,3 @@
-.section {
-  height: 850px;
-  width: 600px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.constructor_wrapper {
-  display: flex;
-  flex-direction: column;
-  max-height: 680px;
-}
-
 .constructor {
   display: flex;
   flex-direction: column;
@@ -33,10 +18,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.item_wrapper {
-  height: 80px;
 }
 
 .ingredient_wrapper {
