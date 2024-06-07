@@ -1,27 +1,51 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
 import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { ingredientType } from '../utils/prop-types';
+import {
+  bunSelector,
+  mainSelector,
+  sauceSelector,
+} from '../../services/burger-ingredients/selectors';
+import { setIsModalIngredientOpen } from '../../services/viewable-ingredient/reducer';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = ({ ingredients }) => {
+export const BurgerIngredients = () => {
+  const dispatch = useDispatch();
+  const { IsModalOpen } = useSelector((state) => state.viewableIngredient);
+  const bunIngredients = useSelector(bunSelector);
+  const mainIngredients = useSelector(mainSelector);
+  const sauceIngredients = useSelector(sauceSelector);
   const [current, setCurrent] = useState('one');
-  const [choseIngredient, setChoseIngredient] = useState({});
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const refBuns = useRef(null);
+  const refMain = useRef(null);
+  const refSauce = useRef(null);
+  const hoverBoundingRectBuns = refBuns.current?.getBoundingClientRect().top;
+  const hoverBoundingRectMain = refMain.current?.getBoundingClientRect().top;
+  const hoverBoundingRectSauce = refSauce.current?.getBoundingClientRect().top;
 
-  const bunsIngredients = ingredients.filter(
-    (ingredient) => ingredient.type === 'bun'
-  );
-  const mainIngredients = ingredients.filter(
-    (ingredient) => ingredient.type === 'main'
-  );
-  const sauceIngredients = ingredients.filter(
-    (ingredient) => ingredient.type === 'sauce'
-  );
+  const handleScroll = (e) => {
+    if (
+      e.currentTarget.scrollTop >= hoverBoundingRectBuns &&
+      e.currentTarget.scrollTop < hoverBoundingRectSauce
+    ) {
+      setCurrent('one');
+    } else if (
+      e.currentTarget.scrollTop >= hoverBoundingRectSauce &&
+      e.currentTarget.scrollTop < hoverBoundingRectMain
+    ) {
+      setCurrent('two');
+    } else if (e.currentTarget.scrollTop > hoverBoundingRectMain) {
+      setCurrent('three');
+    }
+  };
+
+  const onclose = () => {
+    dispatch(setIsModalIngredientOpen(false));
+  }
 
   return (
     <section className={`${ingredientsStyles.section} mr-10`}>
@@ -31,34 +55,52 @@ export const BurgerIngredients = ({ ingredients }) => {
         Соберите бургер
       </h1>
       <div style={{ display: 'flex' }}>
-        <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+        <Tab
+          value="one"
+          active={current === 'one'}
+          onClick={() => {
+            setCurrent('one');
+          }}
+        >
           Булки
         </Tab>
-        <Tab value="two" active={current === 'two'} onClick={setCurrent}>
+        <Tab
+          value="two"
+          active={current === 'two'}
+          onClick={() => {
+            setCurrent('two');
+          }}
+        >
           Соусы
         </Tab>
-        <Tab value="three" active={current === 'three'} onClick={setCurrent}>
+        <Tab
+          value="three"
+          active={current === 'three'}
+          onClick={() => {
+            setCurrent('three');
+          }}
+        >
           Начинки
         </Tab>
       </div>
-      <div className={`${ingredientsStyles.container} mt-10`}>
+      <div
+        onScroll={(e) => handleScroll(e)}
+        className={`${ingredientsStyles.container} mt-10`}
+      >
         <h2
+          ref={refBuns}
           className={`${ingredientsStyles.text} text text_type_main-medium mt-10 mb-6`}
           id="one"
         >
           Булки
         </h2>
         <div className={`${ingredientsStyles.items_container}`}>
-          {bunsIngredients.map((ingredient) => (
-            <IngredientsItems
-              key={ingredient._id}
-              setChoseIngredient={setChoseIngredient}
-              ingredient={ingredient}
-              setIsOpenModal={setIsOpenModal}
-            />
+          {bunIngredients.map((ingredient) => (
+            <IngredientsItems key={ingredient._id} ingredient={ingredient} />
           ))}
         </div>
         <h2
+          ref={refSauce}
           className={`${ingredientsStyles.text} text text_type_main-medium mt-10 mb-6`}
           id="two"
         >
@@ -66,15 +108,11 @@ export const BurgerIngredients = ({ ingredients }) => {
         </h2>
         <div className={ingredientsStyles.items_container}>
           {sauceIngredients.map((ingredient) => (
-            <IngredientsItems
-              key={ingredient._id}
-              ingredient={ingredient}
-              setChoseIngredient={setChoseIngredient}
-              setIsOpenModal={setIsOpenModal}
-            />
+            <IngredientsItems key={ingredient._id} ingredient={ingredient} />
           ))}
         </div>
         <h2
+          ref={refMain}
           className={`${ingredientsStyles.text} text text_type_main-medium mt-10 mb-6`}
           id="three"
         >
@@ -82,25 +120,16 @@ export const BurgerIngredients = ({ ingredients }) => {
         </h2>
         <div className={ingredientsStyles.items_container}>
           {mainIngredients.map((ingredient) => (
-            <IngredientsItems
-              key={ingredient._id}
-              ingredient={ingredient}
-              setChoseIngredient={setChoseIngredient}
-              setIsOpenModal={setIsOpenModal}
-            />
+            <IngredientsItems key={ingredient._id} ingredient={ingredient} />
           ))}
         </div>
       </div>
 
-      {isOpenModal && (
-        <Modal setIsOpenModal={setIsOpenModal}>
-          <IngredientDetails choseIngredient={choseIngredient} />
+      {IsModalOpen && (
+        <Modal onClose={onclose}>
+          <IngredientDetails />
         </Modal>
       )}
     </section>
   );
-};
-
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientType.isRequired).isRequired,
 };

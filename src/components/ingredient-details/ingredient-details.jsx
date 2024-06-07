@@ -1,11 +1,14 @@
-import PropTypes from 'prop-types';
-import { ingredientType } from '../utils/prop-types';
+import { useSelector } from 'react-redux';
 
 import ingredientDetailsStyles from './ingredient-details.module.css';
 
-export const IngredientDetails = (choseIngredient) => {
+export const IngredientDetails = () => {
+  const { viewableIngredient } = useSelector(
+    (state) => state.viewableIngredient
+  );
+
   const { name, image_large, calories, proteins, fat, carbohydrates } =
-    choseIngredient.choseIngredient;
+    viewableIngredient;
   return (
     <div
       className={`${ingredientDetailsStyles.ingredient_wrapper} mt-15 mb-15`}
@@ -49,8 +52,4 @@ export const IngredientDetails = (choseIngredient) => {
       </ul>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  choseIngredient: PropTypes.shape(ingredientType.isRequired).isRequired,
 };

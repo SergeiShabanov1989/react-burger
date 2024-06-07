@@ -9,11 +9,11 @@ import modalStyles from './modal.module.css';
 
 const modalRoot = document.getElementById('react-modals');
 
-export const Modal = ({ children, setIsOpenModal }) => {
+export const Modal = ({ children, onClose }) => {
   useEffect(() => {
     const closeOnEscModal = (e) => {
       if (e.keyCode === ESC_KEYCODE) {
-        setIsOpenModal(false);
+        onClose()
       }
     };
     window.addEventListener('keydown', closeOnEscModal);
@@ -24,7 +24,7 @@ export const Modal = ({ children, setIsOpenModal }) => {
 
   return createPortal(
     <>
-      <ModalOverlay setIsOpenModal={setIsOpenModal}>
+      <ModalOverlay onClose={onClose}>
         <div
           className={modalStyles.modal}
           onClick={(e) => {
@@ -33,7 +33,9 @@ export const Modal = ({ children, setIsOpenModal }) => {
         >
           <div
             className={modalStyles.close_overlay}
-            onClick={() => setIsOpenModal(false)}
+            onClick={() => {
+              onClose()
+            }}
           >
             <CloseIcon type="primary" />
           </div>
@@ -47,5 +49,5 @@ export const Modal = ({ children, setIsOpenModal }) => {
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
-  setIsOpenModal: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 };

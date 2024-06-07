@@ -1,29 +1,48 @@
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrag } from 'react-dnd';
 import {
   CurrencyIcon,
   Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../utils/prop-types';
+import {
+  setViewableIngredient,
+  setIsModalIngredientOpen,
+} from '../../services/viewable-ingredient/reducer';
 
 import ingredientsItemsStyles from './ingredients-items.module.css';
 
-export const IngredientsItems = ({
-  setChoseIngredient,
-  ingredient,
-  setIsOpenModal,
-}) => {
+export const IngredientsItems = ({ ingredient }) => {
+  const dispatch = useDispatch();
+  const { constructorIngredients, buns } = useSelector(
+    (state) => state.constructorIngredients
+  );
+  const [, dragRef] = useDrag({
+    type: ingredient.type,
+    item: ingredient,
+  });
+
+  const countBuns = buns !== null && buns._id === ingredient._id ? 2 : 0;
+
+  const countIngredients = constructorIngredients.filter(
+    (i) => i._id === ingredient._id
+  ).length;
+
   const { image, name, price } = ingredient;
+
   const handleOnClick = () => {
-    setChoseIngredient(ingredient);
-    setIsOpenModal(true);
+    dispatch(setViewableIngredient(ingredient));
+    dispatch(setIsModalIngredientOpen(true));
   };
   return (
     <div
       className={`${ingredientsItemsStyles.container} ml-4 mr-6 mt-4`}
       onClick={handleOnClick}
+      ref={dragRef}
     >
       <Counter
-        count={1}
+        count={countIngredients || countBuns}
         size="small"
         extraClass={ingredientsItemsStyles.count}
       />
@@ -42,7 +61,5 @@ export const IngredientsItems = ({
 };
 
 IngredientsItems.propTypes = {
-  setChoseIngredient: PropTypes.func.isRequired,
   ingredient: PropTypes.shape(ingredientType.isRequired),
-  setIsOpenModal: PropTypes.func.isRequired,
 };
