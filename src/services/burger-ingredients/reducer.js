@@ -16,17 +16,17 @@ export const getIngredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.pending, (state) => {
-        state.loading = true;
-        state.error = false;
+        state.isLoading = true;
+        state.isError = false;
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.ingredients = action.payload.data;
-        state.loading = false;
-        state.error = false;
+        state.isLoading = false;
+        state.isError = false;
       })
       .addCase(getIngredients.rejected, (state) => {
-        state.loading = false;
-        state.error = true;
+        state.isLoading = false;
+        state.isError = true;
       });
   },
 });

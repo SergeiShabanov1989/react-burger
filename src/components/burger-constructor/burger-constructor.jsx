@@ -41,6 +41,10 @@ export const BurgerConstructor = () => {
     dispatch(sendOrder({ ingredients: pushOrder }));
   };
 
+  const onclose = () => {
+    dispatch(setIsModalOrderOpen(false));
+  };
+
   return (
     <section className={`${ConstructorStyles.section} mt-25`}>
       <div
@@ -107,7 +111,7 @@ export const BurgerConstructor = () => {
         </Button>
       </div>
       {IsModalOpen && (
-        <Modal>
+        <Modal onClose={onclose}>
           <OrderDetails />
         </Modal>
       )}

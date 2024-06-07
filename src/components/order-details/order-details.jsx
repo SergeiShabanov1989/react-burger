@@ -22,14 +22,14 @@ export const OrderDetails = () => {
         className={`${orderDetailsStyles.image} mb-10`}
       />
       <p
-        className={`${orderDetailsStyles.order_text} text text_type_main-small mb-2`}
+        className={`${orderDetailsStyles.order_text} text text_type_main-small mb-2 pl-6 pr-6`}
       >
-        Ваш заказ начали готовить
+        Ваш {order ? `"${order.name}" начали готовить` : 'произошла ошибка, повторите заказ'}
       </p>
       <p
         className={`${orderDetailsStyles.order_text} text text_type_main-small text_color_inactive mb-15`}
       >
-        Дождитесь готовности на орбитальной станции
+        {order ? 'Дождитесь готовности на орбитальной станции' : 'повторите заказ на орбитальной станции'}
       </p>
     </div>
   );

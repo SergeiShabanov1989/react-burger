@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
 import { Modal } from '../modal/modal';
@@ -9,10 +9,12 @@ import {
   mainSelector,
   sauceSelector,
 } from '../../services/burger-ingredients/selectors';
+import { setIsModalIngredientOpen } from '../../services/viewable-ingredient/reducer';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = () => {
+  const dispatch = useDispatch();
   const { IsModalOpen } = useSelector((state) => state.viewableIngredient);
   const bunIngredients = useSelector(bunSelector);
   const mainIngredients = useSelector(mainSelector);
@@ -40,6 +42,10 @@ export const BurgerIngredients = () => {
       setCurrent('three');
     }
   };
+
+  const onclose = () => {
+    dispatch(setIsModalIngredientOpen(false));
+  }
 
   return (
     <section className={`${ingredientsStyles.section} mr-10`}>
@@ -120,7 +126,7 @@ export const BurgerIngredients = () => {
       </div>
 
       {IsModalOpen && (
-        <Modal>
+        <Modal onClose={onclose}>
           <IngredientDetails />
         </Modal>
       )}
