@@ -6,6 +6,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import headerStyles from './app-header.module.css';
+import { NavLink } from 'react-router-dom';
 
 export const AppHeader = () => {
   return (
@@ -14,14 +15,20 @@ export const AppHeader = () => {
         <nav className={`${headerStyles.menu} pb-4 pt-4`}>
           <ul className={`${headerStyles.list} pb-5 pt-5`}>
             <li className={`${headerStyles.item} pb-5 pt-5 mr-2`}>
-              <a href="/" className={`${headerStyles.link} mr-8`}>
-                <BurgerIcon type="primary" />
-                <p
-                  className={`${headerStyles.link_text} text text_type_main-default pl-2`}
-                >
-                  Конструктор
-                </p>
-              </a>
+              <NavLink to="/" className={`${headerStyles.link} mr-8`}>
+                {({ isActive }) =>
+                  (
+                    <>
+                      <BurgerIcon {...isActive ? { type: 'primary' } : { type: 'secondary' }} />
+                      <p
+                        className={`${isActive ? headerStyles.link_text_active : headerStyles.link_text} text text_type_main-default pl-2`}
+                      >
+                        Конструктор
+                      </p>
+                    </>
+                  )
+                }
+              </NavLink>
             </li>
             <li className={`${headerStyles.item} pb-5 pt-5`}>
               {/* eslint-disable-next-line */}
