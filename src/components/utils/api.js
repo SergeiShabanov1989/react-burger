@@ -5,18 +5,16 @@ export const checkResponse = (res) => {
 };
 
 function request(url, options) {
-  return fetch(url, options).then(checkResponse)
+  return fetch(url, options).then(checkResponse);
 }
 
-
 export const getIngredientsFromServer = async () => {
-
   return request(`${BASE_URL}/ingredients`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-  })
+  });
 };
 
 export const sendOrderToServer = async (order) => {
@@ -26,5 +24,15 @@ export const sendOrderToServer = async (order) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(order),
-  })
+  });
+};
+
+export const registerUser = async (formValue) => {
+  return request(`${BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formValue),
+  });
 };

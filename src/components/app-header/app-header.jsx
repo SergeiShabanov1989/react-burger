@@ -42,9 +42,10 @@ export const AppHeader = () => {
               </a>
             </li>
           </ul>
-        </nav>
+          
         <Logo type="primary" />
-        <nav className={headerStyles.menu}>
+        </nav>
+        <nav className={`${headerStyles.menu}`}>
           <ul className={headerStyles.list}>
             <li className={`${headerStyles.item} pb-5 pt-5`}>
               {/* eslint-disable-next-line */}

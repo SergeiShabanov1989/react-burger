@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
-import loginStyles from './login.module.css';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
+import registerStyles from './register.module.css';
 import { validateEmail } from '../components/utils/validate';
+import { register } from '../services/user/actions';
 
-export function LoginPage() {
+export function RegisterPage() {
+  const dispatch = useDispatch();
   const [formValue, setFormValue] = useState({
+    name: '',
     email: '',
     password: '',
   });
@@ -20,7 +24,7 @@ export function LoginPage() {
   const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    if (error.email !== '' || error.password !== '') {
+    if (error.email !== '' || error.password !== '' || error.name !== '') {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
@@ -39,6 +43,16 @@ export function LoginPage() {
       const stateObj = { ...prev, [name]: '' };
 
       switch (name) {
+        case 'name':
+          if (!value) {
+            stateObj[name] = 'Обязательное поле';
+          } else if (value.length < 4) {
+            stateObj[name] = 'Минимальная длина 4 символа';
+          } else {
+            stateObj[name] = '';
+          }
+          break;
+
         case 'email':
           if (!value || !validateEmail(value)) {
             stateObj[name] = 'Некорректная почта';
@@ -69,15 +83,27 @@ export function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('хаю хай');
+    dispatch(register(formValue));
   };
 
   return (
-    <div className={loginStyles.body}>
-      <h1 className={`${loginStyles.title} text text_type_main-large mb-6`}>
-        Вход
+    <div className={registerStyles.body}>
+      <h1 className={`${registerStyles.title} text text_type_main-large mb-6`}>
+        Регистрация
       </h1>
-      <form className={`${loginStyles.form} mb-6`} onSubmit={handleSubmit}>
+      <form className={`${registerStyles.form} mb-6`} onSubmit={handleSubmit}>
+        <Input
+          minLength={4}
+          extraClass="mb-6"
+          placeholder="Имя"
+          type="text"
+          name="name"
+          value={formValue.name}
+          required
+          onChange={handleInput}
+          {...(error.name && { error: true })}
+          errorText={error.name}
+        />
         <Input
           extraClass="mb-6"
           placeholder="e-mail"
@@ -105,25 +131,16 @@ export function LoginPage() {
         />
 
         <Button disabled={isDisabled} htmlType="submit" extraClass="mb-20">
-          Войти
+          Зарегистрироваться
         </Button>
       </form>
       <p className="text text_type_main-default text_color_inactive mb-4">
-        Вы новый пользователь?{' '}
+        Уже зарегистрированы?
         <Link
-          to="/register"
-          className={`${loginStyles.link} text text_type_main-default`}
+          to="/login"
+          className={`${registerStyles.link} text text_type_main-default ml-2`}
         >
-          Зарегистрироваться
-        </Link>
-      </p>
-      <p className="text text_type_main-default text_color_inactive">
-        Забыли пароль?{' '}
-        <Link
-          to="/forgot-password"
-          className={`${loginStyles.link} text text_type_main-default`}
-        >
-          Восстановить пароль
+          Войти
         </Link>
       </p>
     </div>
