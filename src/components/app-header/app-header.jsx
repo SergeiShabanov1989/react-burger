@@ -16,18 +16,20 @@ export const AppHeader = () => {
           <ul className={`${headerStyles.list} pb-5 pt-5`}>
             <li className={`${headerStyles.item} pb-5 pt-5 mr-2`}>
               <NavLink to="/" className={`${headerStyles.link} mr-8`}>
-                {({ isActive }) =>
-                  (
-                    <>
-                      <BurgerIcon {...isActive ? { type: 'primary' } : { type: 'secondary' }} />
-                      <p
-                        className={`${isActive ? headerStyles.link_text_active : headerStyles.link_text} text text_type_main-default pl-2`}
-                      >
-                        Конструктор
-                      </p>
-                    </>
-                  )
-                }
+                {({ isActive }) => (
+                  <>
+                    <BurgerIcon
+                      {...(isActive
+                        ? { type: 'primary' }
+                        : { type: 'secondary' })}
+                    />
+                    <p
+                      className={`${isActive ? headerStyles.link_text_active : headerStyles.link_text} text text_type_main-default pl-2`}
+                    >
+                      Конструктор
+                    </p>
+                  </>
+                )}
               </NavLink>
             </li>
             <li className={`${headerStyles.item} pb-5 pt-5`}>
@@ -42,21 +44,28 @@ export const AppHeader = () => {
               </a>
             </li>
           </ul>
-          
-        <Logo type="primary" />
+
+          <Logo type="primary" />
         </nav>
         <nav className={`${headerStyles.menu}`}>
           <ul className={headerStyles.list}>
             <li className={`${headerStyles.item} pb-5 pt-5`}>
-              {/* eslint-disable-next-line */}
-              <a className={headerStyles.link}>
-                <ProfileIcon type="primary" />
-                <p
-                  className={`${headerStyles.link_text} text text_type_main-default pl-2`}
-                >
-                  Личный кабинет
-                </p>
-              </a>
+              <NavLink to="/user/profile" className={`${headerStyles.link}`}>
+                {({ isActive }) => (
+                  <>
+                    <ProfileIcon
+                      {...(isActive
+                        ? { type: 'primary' }
+                        : { type: 'secondary' })}
+                    />
+                    <p
+                      className={`${isActive ? headerStyles.link_text_active : headerStyles.link_text} text text_type_main-default pl-2`}
+                    >
+                      Личный кабинет
+                    </p>
+                  </>
+                )}
+              </NavLink>
             </li>
           </ul>
         </nav>

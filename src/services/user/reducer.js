@@ -1,31 +1,46 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { register } from './actions';
+import { register, logout, login, updateUserProfile } from './actions';
 
 const initialState = {
   user: null,
-  isLoading: false,
-  isError: false,
+  isAuthChecked: false,
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload.user;
+    },
+    setIsAuthChecked: (state, action) => {
+      state.isAuthChecked = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
+        state.isAuthChecked = false;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.user = action.payload.user;
-        localStorage.setItem('token', action.payload.accessToken.split('Bearer')[1]);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
-        state.isLoading = false;
-        state.isError = false;
+        state.isAuthChecked = true;
       })
-      .addCase(register.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.isAuthChecked = true;
+      })
+      .addCase(login.pending, (state) => {
+        state.isAuthChecked = false;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.isAuthChecked = true;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.user = action.payload.user;
       });
   },
 });
+
+export const { setUser, setIsAuthChecked } = userSlice.actions;

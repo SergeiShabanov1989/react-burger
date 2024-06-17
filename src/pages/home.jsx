@@ -12,7 +12,7 @@ export function HomePage() {
 
   useEffect(() => {
     dispatch(getIngredients());
-  }, [dispatch]);
+  }, []);
 
   return (
     <>

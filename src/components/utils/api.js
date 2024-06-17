@@ -27,6 +27,57 @@ export const sendOrderToServer = async (order) => {
   });
 };
 
+export const refreshToken = async () => {
+  return request(`${BASE_URL}/auth/token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      token: localStorage.getItem('refreshToken'),
+    }),
+  });
+};
+
+export const loginUser = async (formValue) => {
+  return request(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formValue),
+  }).then((data) => {
+    localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    return data;
+  });
+};
+
+export const getUser = async () => {
+  return request(`${BASE_URL}/auth/user`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer' + `${localStorage.getItem('token')}`,
+    },
+  }).catch((err) => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    throw err;
+  });
+};
+
+export const updateUser = async (formValue) => {
+  return request(`${BASE_URL}/auth/user`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer' + `${localStorage.getItem('token')}`,
+    },
+    body: JSON.stringify(formValue),
+  });
+};
+
 export const registerUser = async (formValue) => {
   return request(`${BASE_URL}/auth/register`, {
     method: 'POST',
@@ -34,5 +85,23 @@ export const registerUser = async (formValue) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(formValue),
+  }).then((data) => {
+    localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    return data;
+  });
+};
+
+export const logoutUser = async (refreshToken) => {
+  return request(`${BASE_URL}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token: refreshToken }),
+  }).then((data) => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    return data;
   });
 };

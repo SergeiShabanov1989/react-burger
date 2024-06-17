@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import loginStyles from './login.module.css';
 import {
   Button,
@@ -6,8 +7,10 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../components/utils/validate';
+import { login } from '../services/user/actions';
 
 export function LoginPage() {
+  const dispatch = useDispatch();
   const [formValue, setFormValue] = useState({
     email: '',
     password: '',
@@ -69,7 +72,7 @@ export function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('хаю хай');
+    dispatch(login(formValue));
   };
 
   return (
