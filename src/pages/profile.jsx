@@ -97,6 +97,8 @@ export function ProfilePage() {
     if (formValue.name !== user?.name || formValue.email !== user?.email) {
       dispatch(updateUserProfile(formValue));
     }
+
+    setInputDisabled(true);
   };
 
   return (

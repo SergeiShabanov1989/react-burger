@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import resetStyles from './login.module.css';
+import resetStyles from './reset-password.module.css';
 import {
   Button,
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { resetPassword } from '../components/utils/api';
 
 export function ResetPage() {
+  const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     password: null,
     token: null,
@@ -60,7 +62,16 @@ export function ResetPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('хаю хай');
+
+    resetPassword(formValue)
+      .then((res) => {
+        if (res.success) {
+          return navigate('/login');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -95,7 +106,11 @@ export function ResetPage() {
           {...(error.token && { error: true })}
         />
 
-        <Button {...((error.password || error.token) && { disabled: true })} htmlType="submit" extraClass="mb-20">
+        <Button
+          {...((error.password || error.token) && { disabled: true })}
+          htmlType="submit"
+          extraClass="mb-20"
+        >
           Сохранить
         </Button>
       </form>

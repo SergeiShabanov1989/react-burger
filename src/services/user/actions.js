@@ -1,8 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setUser, setIsAuthChecked } from './reducer';
-import { registerUser, logoutUser, loginUser, getUser, updateUser } from '../../components/utils/api';
-
-
+import {
+  registerUser,
+  logoutUser,
+  loginUser,
+  getUser,
+  updateUser,
+  refreshToken,
+} from '../../components/utils/api';
 
 export const register = createAsyncThunk(
   'user/registerUser',
@@ -11,12 +16,9 @@ export const register = createAsyncThunk(
   }
 );
 
-export const login = createAsyncThunk(
-  'user/loginUser',
-  async (formValue) => {
-    return await loginUser(formValue);
-  }
-);
+export const login = createAsyncThunk('user/loginUser', async (formValue) => {
+  return await loginUser(formValue);
+});
 
 export const checkUserAuth = createAsyncThunk(
   'user/checkUserAuth',
@@ -38,7 +40,14 @@ export const checkUserAuth = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
   'user/updateUserProfile',
   async (formValue) => {
-    return await updateUser(formValue);
+    await updateUser(formValue)
+      .catch((err) => {
+        if (err.status === 403) {
+          refreshToken().then(() => {
+            return updateUser(formValue);
+          });
+        }
+      });
   }
 );
 

@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import registerStyles from './register.module.css';
+import forgotStyles from './forgot-password.module.css';
 import {
   Button,
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../components/utils/validate';
+import { forgotPassword } from '../components/utils/api';
 
 export function ForgotPage() {
+  const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: '',
   });
@@ -43,15 +45,23 @@ export function ForgotPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('хаю хай');
+    forgotPassword(formValue)
+      .then((res) => {
+        if (res.success) {
+          return navigate('/reset-password');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
-    <div className={registerStyles.body}>
-      <h1 className={`${registerStyles.title} text text_type_main-large mb-6`}>
+    <div className={forgotStyles.body}>
+      <h1 className={`${forgotStyles.title} text text_type_main-large mb-6`}>
         Восстановление пароля
       </h1>
-      <form className={`${registerStyles.form} mb-6`} onSubmit={handleSubmit}>
+      <form className={`${forgotStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input
           extraClass="mb-6"
           placeholder="Укажите e-mail"
@@ -72,7 +82,7 @@ export function ForgotPage() {
         Вспомнили пароль?
         <Link
           to="/login"
-          className={`${registerStyles.link} text text_type_main-default ml-2`}
+          className={`${forgotStyles.link} text text_type_main-default ml-2`}
         >
           Войти
         </Link>

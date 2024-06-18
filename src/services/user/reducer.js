@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { register, logout, login, updateUserProfile } from './actions';
+import { refreshToken } from '../../components/utils/api';
 
 const initialState = {
   user: null,
@@ -16,6 +17,10 @@ export const userSlice = createSlice({
     setIsAuthChecked: (state, action) => {
       state.isAuthChecked = action.payload;
     },
+  },
+  selectors: {
+    getUser: (state) => state.user,
+    getIsAuthChecked: (state) => state.isAuthChecked,
   },
   extraReducers: (builder) => {
     builder
@@ -39,8 +44,12 @@ export const userSlice = createSlice({
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.user = action.payload.user;
+      })
+      .addCase(updateUserProfile.rejected, () => {
+        refreshToken();
       });
   },
 });
 
 export const { setUser, setIsAuthChecked } = userSlice.actions;
+export const { getUser, getIsAuthChecked } = userSlice.selectors;

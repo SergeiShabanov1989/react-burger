@@ -36,6 +36,10 @@ export const refreshToken = async () => {
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken'),
     }),
+  }).then((data) => {
+    localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    return data;
   });
 };
 
@@ -61,9 +65,13 @@ export const getUser = async () => {
       Authorization: 'Bearer' + `${localStorage.getItem('token')}`,
     },
   }).catch((err) => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    throw err;
+    if (err.status === 403) {
+      return refreshToken();
+    } else {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      throw err;
+    }
   });
 };
 
@@ -92,16 +100,36 @@ export const registerUser = async (formValue) => {
   });
 };
 
-export const logoutUser = async (refreshToken) => {
+export const logoutUser = async () => {
   return request(`${BASE_URL}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ token: refreshToken }),
+    body: JSON.stringify({ token: localStorage.getItem('refreshToken') }),
   }).then((data) => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     return data;
+  });
+};
+
+export const forgotPassword = async (formValue) => {
+  return request(`${BASE_URL}/password-reset`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formValue),
+  });
+};
+
+export const resetPassword = async (formValue) => {
+  return request(`${BASE_URL}/password-reset/reset`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formValue),
   });
 };

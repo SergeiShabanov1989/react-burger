@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
 import { Modal } from '../modal/modal';
@@ -14,6 +15,7 @@ import { setIsModalIngredientOpen } from '../../services/viewable-ingredient/red
 import ingredientsStyles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const { IsModalOpen } = useSelector((state) => state.viewableIngredient);
   const bunIngredients = useSelector(bunSelector);
@@ -45,7 +47,7 @@ export const BurgerIngredients = () => {
 
   const onclose = () => {
     dispatch(setIsModalIngredientOpen(false));
-  }
+  };
 
   return (
     <section className={`${ingredientsStyles.section} mr-10`}>
@@ -96,7 +98,16 @@ export const BurgerIngredients = () => {
         </h2>
         <div className={`${ingredientsStyles.items_container}`}>
           {bunIngredients.map((ingredient) => (
-            <IngredientsItems key={ingredient._id} ingredient={ingredient} />
+            <>
+              <Link
+                key={ingredient._id}
+                to={{ pathname: `/ingredients/${ingredient._id}` }}
+                state={{ backgroundLocation: location }}
+                className={ingredientsStyles.link}
+              >
+                <IngredientsItems ingredient={ingredient} />
+              </Link>
+            </>
           ))}
         </div>
         <h2
