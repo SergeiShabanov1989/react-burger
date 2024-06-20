@@ -28,6 +28,11 @@ export const checkUserAuth = createAsyncThunk(
         .then((user) => {
           dispatch(setUser(user));
         })
+        .catch((err) => {
+          if (err.success === false) {
+            return refreshToken();
+          }
+        })
         .finally(() => {
           dispatch(setIsAuthChecked(true));
         });
@@ -40,14 +45,13 @@ export const checkUserAuth = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
   'user/updateUserProfile',
   async (formValue) => {
-    await updateUser(formValue)
-      .catch((err) => {
-        if (err.status === 403) {
-          refreshToken().then(() => {
-            return updateUser(formValue);
-          });
-        }
-      });
+    await updateUser(formValue).catch((err) => {
+      if (err.success === false) {
+        refreshToken().then(() => {
+          return updateUser(formValue);
+        });
+      }
+    });
   }
 );
 

@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
 import { Modal } from '../modal/modal';
@@ -15,6 +15,7 @@ import { setIsModalIngredientOpen } from '../../services/viewable-ingredient/red
 import ingredientsStyles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = () => {
+  let navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const { IsModalOpen } = useSelector((state) => state.viewableIngredient);
@@ -45,9 +46,10 @@ export const BurgerIngredients = () => {
     }
   };
 
-  const onclose = () => {
-    dispatch(setIsModalIngredientOpen(false));
-  };
+  // const onclose = () => {
+  //   dispatch(setIsModalIngredientOpen(false));
+  //   navigate(-1);
+  // };
 
   return (
     <section className={`${ingredientsStyles.section} mr-10`}>
@@ -98,16 +100,14 @@ export const BurgerIngredients = () => {
         </h2>
         <div className={`${ingredientsStyles.items_container}`}>
           {bunIngredients.map((ingredient) => (
-            <>
               <Link
                 key={ingredient._id}
                 to={{ pathname: `/ingredients/${ingredient._id}` }}
                 state={{ backgroundLocation: location }}
                 className={ingredientsStyles.link}
               >
-                <IngredientsItems ingredient={ingredient} />
+                <IngredientsItems key={ingredient._id} ingredient={ingredient} />
               </Link>
-            </>
           ))}
         </div>
         <h2
@@ -119,7 +119,14 @@ export const BurgerIngredients = () => {
         </h2>
         <div className={ingredientsStyles.items_container}>
           {sauceIngredients.map((ingredient) => (
-            <IngredientsItems key={ingredient._id} ingredient={ingredient} />
+            <Link
+              key={ingredient._id}
+              to={{ pathname: `/ingredients/${ingredient._id}` }}
+              state={{ backgroundLocation: location }}
+              className={ingredientsStyles.link}
+            >
+              <IngredientsItems key={ingredient._id} ingredient={ingredient} />
+            </Link>
           ))}
         </div>
         <h2
@@ -131,16 +138,23 @@ export const BurgerIngredients = () => {
         </h2>
         <div className={ingredientsStyles.items_container}>
           {mainIngredients.map((ingredient) => (
-            <IngredientsItems key={ingredient._id} ingredient={ingredient} />
+            <Link
+              key={ingredient._id}
+              to={{ pathname: `/ingredients/${ingredient._id}` }}
+              state={{ backgroundLocation: location }}
+              className={ingredientsStyles.link}
+            >
+              <IngredientsItems key={ingredient._id} ingredient={ingredient} />
+            </Link>
           ))}
         </div>
       </div>
 
-      {IsModalOpen && (
+      {/* {IsModalOpen && (
         <Modal onClose={onclose}>
           <IngredientDetails />
         </Modal>
-      )}
+      )} */}
     </section>
   );
 };

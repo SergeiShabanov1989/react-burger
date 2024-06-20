@@ -65,13 +65,9 @@ export const getUser = async () => {
       Authorization: 'Bearer' + `${localStorage.getItem('token')}`,
     },
   }).catch((err) => {
-    if (err.status === 403) {
-      return refreshToken();
-    } else {
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
       throw err;
-    }
   });
 };
 

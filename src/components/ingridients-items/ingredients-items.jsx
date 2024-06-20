@@ -15,7 +15,6 @@ import {
 import ingredientsItemsStyles from './ingredients-items.module.css';
 
 export const IngredientsItems = ({ ingredient }) => {
-  const location = useLocation();
   const dispatch = useDispatch();
   const { constructorIngredients, buns } = useSelector(
     (state) => state.constructorIngredients
@@ -37,7 +36,6 @@ export const IngredientsItems = ({ ingredient }) => {
     dispatch(setViewableIngredient(ingredient));
     dispatch(setIsModalIngredientOpen(true));
   };
-  console.log(location);
   return (
     <div
       className={`${ingredientsItemsStyles.container} ml-4 mr-6 mt-4`}

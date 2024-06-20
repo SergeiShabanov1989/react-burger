@@ -13,7 +13,7 @@ export const Modal = ({ children, onClose }) => {
   useEffect(() => {
     const closeOnEscModal = (e) => {
       if (e.keyCode === ESC_KEYCODE) {
-        onClose()
+        onClose();
       }
     };
     window.addEventListener('keydown', closeOnEscModal);
@@ -34,7 +34,7 @@ export const Modal = ({ children, onClose }) => {
           <div
             className={modalStyles.close_overlay}
             onClick={() => {
-              onClose()
+              onClose();
             }}
           >
             <CloseIcon type="primary" />
@@ -49,5 +49,5 @@ export const Modal = ({ children, onClose }) => {
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
 };
