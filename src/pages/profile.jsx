@@ -35,12 +35,12 @@ export function ProfilePage() {
   }, [user]);
 
   useEffect(() => {
-    if (error.email !== '' || error.password !== '' || error.name !== '') {
+    if (user.email === formValue.email && user.name === formValue.name) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
-  }, [error]);
+  }, [formValue, user]);
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -94,9 +94,7 @@ export function ProfilePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formValue.name !== user?.name || formValue.email !== user?.email) {
-      dispatch(updateUserProfile(formValue));
-    }
+    dispatch(updateUserProfile(formValue));
 
     setInputDisabled(true);
   };
@@ -147,19 +145,10 @@ export function ProfilePage() {
         />
 
         {!isInputDisabled && (
-          <>
-            <Button
-              htmlType="submit"
-              type="primary"
-              size="medium"
-              disabled={isDisabled}
-            >
-              Сохранить
-            </Button>
-            <Button
-              htmlType="button"
-              type="primary"
-              size="medium"
+          <div className={profileStyles.buttons_wrapper}>
+            <button
+              className={`${profileStyles.button} text text_type_main-default mr-4`}
+              type="button"
               onClick={() => {
                 setInputDisabled(true);
                 setFormValue({
@@ -171,8 +160,16 @@ export function ProfilePage() {
               }}
             >
               Отмена
+            </button>
+            <Button
+              htmlType="submit"
+              type="primary"
+              size="medium"
+              disabled={isDisabled}
+            >
+              Сохранить
             </Button>
-          </>
+          </div>
         )}
       </form>
     </div>

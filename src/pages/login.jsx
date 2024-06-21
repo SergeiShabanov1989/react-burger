@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import loginStyles from './login.module.css';
 import {
   Button,
@@ -8,9 +8,13 @@ import {
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../components/utils/validate';
 import { login } from '../services/user/actions';
+import {
+  getIsError
+} from '../services/user/reducer';
 
 export function LoginPage() {
   const dispatch = useDispatch();
+  const isError = useSelector(getIsError);
   const [formValue, setFormValue] = useState({
     email: '',
     password: '',
@@ -75,6 +79,8 @@ export function LoginPage() {
     dispatch(login(formValue));
   };
 
+  console.log(isError)
+
   return (
     <div className={loginStyles.body}>
       <h1 className={`${loginStyles.title} text text_type_main-large mb-6`}>
@@ -106,25 +112,25 @@ export function LoginPage() {
           errorText={error.password}
           {...(error.password && { error: true })}
         />
-
+        {isError && <p className="text text_type_main-default text_color_error mb-6">Некорректная почта или пароль</p>}
         <Button disabled={isDisabled} htmlType="submit" extraClass="mb-20">
           Войти
         </Button>
       </form>
       <p className="text text_type_main-default text_color_inactive mb-4">
-        Вы новый пользователь?{' '}
+        Вы новый пользователь?
         <Link
           to="/register"
-          className={`${loginStyles.link} text text_type_main-default`}
+          className={`${loginStyles.link} text text_type_main-default ml-2`}
         >
           Зарегистрироваться
         </Link>
       </p>
       <p className="text text_type_main-default text_color_inactive">
-        Забыли пароль?{' '}
+        Забыли пароль?
         <Link
           to="/forgot-password"
-          className={`${loginStyles.link} text text_type_main-default`}
+          className={`${loginStyles.link} text text_type_main-default ml-2`}
         >
           Восстановить пароль
         </Link>

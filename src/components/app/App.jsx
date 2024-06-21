@@ -18,6 +18,7 @@ import { setIsModalIngredientOpen } from '../../services/viewable-ingredient/red
 import {
   OnlyUnAuthorized,
   OnlyAuthorized,
+  OnlyAfterEmailCheck,
 } from '../protected-route/protected-route';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
 
   useEffect(() => {
     dispatch(checkUserAuth());
-  }, []);
+  }, [dispatch]);
 
   const onclose = () => {
     dispatch(setIsModalIngredientOpen(false));
@@ -36,14 +37,14 @@ function App() {
   };
   let state = location.state;
 
-  console.log(state);
-
   return (
     <>
       <AppHeader />
       <Routes location={state?.backgroundLocation || location}>
-        <Route index element={<HomePage />} />
-        <Route path="ingredients/:id" element={<IngredientPage />} />
+        <Route path="/ingredients">
+          <Route index element={<HomePage />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
+        </Route>
         <Route
           path="/login"
           element={<OnlyUnAuthorized component={<LoginPage />} />}
@@ -58,7 +59,7 @@ function App() {
         />
         <Route
           path="/reset-password"
-          element={<OnlyUnAuthorized component={<ResetPage />} />}
+          element={<OnlyAfterEmailCheck component={<ResetPage />} />}
         />
         <Route
           path="user"

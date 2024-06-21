@@ -1,13 +1,14 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import userStyles from './user.module.css';
 import { logout } from '../services/user/actions';
 
 export function UserPage() {
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
-  }
+  };
   return (
     <section className={userStyles.section}>
       <div className={userStyles.body}>
@@ -38,11 +39,25 @@ export function UserPage() {
           </NavLink>
           <button
             className={`${userStyles.button} text text_type_main-medium mb-6 mt-6 text_color_inactive`}
-            type='button'
+            type="button"
             onClick={handleLogout}
           >
             Выход
           </button>
+
+          {pathname === '/user/orders' ? (
+            <p
+              className={`${userStyles.text} text text_type_main-small text_color_inactive mt-10`}
+            >
+              В этом разделе вы можете просмотреть свою историю заказов
+            </p>
+          ) : (
+            <p
+              className={`${userStyles.text} text text_type_main-small text_color_inactive mt-10`}
+            >
+              В этом разделе вы можете изменить свои персональные данные
+            </p>
+          )}
         </nav>
         <Outlet />
       </div>

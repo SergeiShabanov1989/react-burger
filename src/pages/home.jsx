@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import {Outlet } from 'react-router-dom';
 import homeStyles from './home.module.css';
 import { Main } from '../components/main/main';
 import { getIngredientsFromServer } from '../components/utils/api';
@@ -31,6 +32,8 @@ export function HomePage() {
       ) : (
         <Main />
       )}
+
+      <Outlet />
     </>
   );
 }

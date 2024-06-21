@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import forgotStyles from './forgot-password.module.css';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Input,
@@ -7,8 +8,10 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../components/utils/validate';
 import { forgotPassword } from '../components/utils/api';
+import {setIsEmailChecked} from '../services/user/reducer';
 
 export function ForgotPage() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: '',
@@ -16,6 +19,15 @@ export function ForgotPage() {
   const [error, setError] = useState({
     email: null,
   });
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    if (error.email !== '') {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [error]);
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -48,8 +60,11 @@ export function ForgotPage() {
     forgotPassword(formValue)
       .then((res) => {
         if (res.success) {
-          return navigate('/reset-password');
+          return dispatch(setIsEmailChecked(true));
         }
+      })
+      .then(() => {
+        navigate('/reset-password');
       })
       .catch((err) => {
         console.log(err);
@@ -74,7 +89,7 @@ export function ForgotPage() {
           {...(error.email && { error: true })}
         />
 
-        <Button htmlType="submit" extraClass="mb-20">
+        <Button disabled={isDisabled} htmlType="submit" extraClass="mb-20">
           Восстановить
         </Button>
       </form>

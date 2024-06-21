@@ -62,12 +62,12 @@ export const getUser = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer' + `${localStorage.getItem('token')}`,
+      Authorization: `Bearer${localStorage.getItem('token')}`,
     },
   }).catch((err) => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
-      throw err;
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    throw err;
   });
 };
 
@@ -76,9 +76,18 @@ export const updateUser = async (formValue) => {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer' + `${localStorage.getItem('token')}`,
+      Authorization: `Bearer${localStorage.getItem('token')}`,
     },
     body: JSON.stringify(formValue),
+  }).catch((err) => {
+    if (!err.success) {
+      refreshToken().then((data) => {
+        if (data.success) {
+          return updateUser(formValue);
+        }
+        return;
+      });
+    }
   });
 };
 

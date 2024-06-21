@@ -10,8 +10,8 @@ import { resetPassword } from '../components/utils/api';
 export function ResetPage() {
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
-    password: null,
-    token: null,
+    password: '',
+    token: '',
   });
   const [error, setError] = useState({
     password: null,
@@ -19,10 +19,15 @@ export function ResetPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
 
+  const [isDisabled, setIsDisabled] = useState(true);
+
   useEffect(() => {
-    validateInput({ target: { name: 'password' } });
-    validateInput({ target: { name: 'token' } });
-  }, []);
+    if (error.password !== '' || error.token !== '') {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [error]);
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -39,12 +44,16 @@ export function ResetPage() {
         case 'password':
           if (!value || value.length < 6) {
             stateObj[name] = 'Минимальная длина пароля 6 символов';
+          } else {
+            stateObj[name] = '';
           }
           break;
 
         case 'token':
           if (!value) {
             stateObj[name] = 'Обязательное поле';
+          } else {
+            stateObj[name] = '';
           }
           break;
 
@@ -70,7 +79,7 @@ export function ResetPage() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        setError({ token: "некорректный токен" });
       });
   };
 
@@ -106,11 +115,7 @@ export function ResetPage() {
           {...(error.token && { error: true })}
         />
 
-        <Button
-          {...((error.password || error.token) && { disabled: true })}
-          htmlType="submit"
-          extraClass="mb-20"
-        >
+        <Button disabled={isDisabled} htmlType="submit" extraClass="mb-20">
           Сохранить
         </Button>
       </form>
