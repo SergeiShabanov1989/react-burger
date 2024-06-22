@@ -15,7 +15,7 @@ export const AppHeader = () => {
         <nav className={`${headerStyles.menu} pb-4 pt-4`}>
           <ul className={`${headerStyles.list} pb-5 pt-5`}>
             <li className={`${headerStyles.item} pb-5 pt-5 mr-2`}>
-              <NavLink to="ingredients" className={`${headerStyles.link} mr-8`}>
+              <NavLink to="/ingredients" className={`${headerStyles.link} mr-8`}>
                 {({ isActive }) => (
                   <>
                     <BurgerIcon

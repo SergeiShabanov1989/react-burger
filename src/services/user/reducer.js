@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { register, logout, login, updateUserProfile } from './actions';
+import { register, logout, login } from './actions';
 
 const initialState = {
   user: null,
   isAuthChecked: false,
   isEmailChecked: false,
   isError: false,
+  isLoading: false,
 };
 
 export const userSlice = createSlice({
@@ -21,12 +22,16 @@ export const userSlice = createSlice({
     setIsEmailChecked: (state, action) => {
       state.isEmailChecked = action.payload;
     },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
   selectors: {
     getUser: (state) => state.user,
     getIsAuthChecked: (state) => state.isAuthChecked,
     getIsEmailChecked: (state) => state.isEmailChecked,
     getIsError: (state) => state.isError,
+    getIsLoading: (state) => state.isLoading,
   },
   extraReducers: (builder) => {
     builder
@@ -52,14 +57,16 @@ export const userSlice = createSlice({
         state.user = null;
         state.isAuthChecked = true;
         state.isError = true;
-      })
-      .addCase(updateUserProfile.fulfilled, (state, action) => {
-        state.user = action.payload.user;
       });
   },
 });
 
-export const { setUser, setIsAuthChecked, setIsEmailChecked } =
+export const { setUser, setIsAuthChecked, setIsEmailChecked, setIsLoading } =
   userSlice.actions;
-export const { getUser, getIsAuthChecked, getIsEmailChecked, getIsError } =
-  userSlice.selectors;
+export const {
+  getUser,
+  getIsAuthChecked,
+  getIsEmailChecked,
+  getIsError,
+  getIsLoading,
+} = userSlice.selectors;

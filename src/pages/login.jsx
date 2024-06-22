@@ -8,13 +8,13 @@ import {
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../components/utils/validate';
 import { login } from '../services/user/actions';
-import {
-  getIsError
-} from '../services/user/reducer';
+import { getIsError, getIsLoading } from '../services/user/reducer';
+import { Preloader } from '../components/preloader/preloader';
 
 export function LoginPage() {
   const dispatch = useDispatch();
   const isError = useSelector(getIsError);
+  const isLoading = useSelector(getIsLoading);
   const [formValue, setFormValue] = useState({
     email: '',
     password: '',
@@ -79,9 +79,9 @@ export function LoginPage() {
     dispatch(login(formValue));
   };
 
-  console.log(isError)
-
-  return (
+  return isLoading ? (
+    <Preloader />
+  ) : (
     <div className={loginStyles.body}>
       <h1 className={`${loginStyles.title} text text_type_main-large mb-6`}>
         Вход
@@ -112,7 +112,11 @@ export function LoginPage() {
           errorText={error.password}
           {...(error.password && { error: true })}
         />
-        {isError && <p className="text text_type_main-default text_color_error mb-6">Некорректная почта или пароль</p>}
+        {isError && (
+          <p className="text text_type_main-default text_color_error mb-6">
+            Некорректная почта или пароль
+          </p>
+        )}
         <Button disabled={isDisabled} htmlType="submit" extraClass="mb-20">
           Войти
         </Button>

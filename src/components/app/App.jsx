@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AppHeader } from '../app-header/app-header';
@@ -13,6 +13,7 @@ import { UserPage } from '../../pages/user';
 import { IngredientPage } from '../../pages/ingredient';
 import { Modal } from '../modal/modal';
 import { checkUserAuth } from '../../services/user/actions';
+import { getIngredients } from '../../services/burger-ingredients/actions';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { setIsModalIngredientOpen } from '../../services/viewable-ingredient/reducer';
 import {
@@ -25,11 +26,14 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { IsModalOpen } = useSelector((state) => state.viewableIngredient);
 
   useEffect(() => {
     dispatch(checkUserAuth());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
 
   const onclose = () => {
     dispatch(setIsModalIngredientOpen(false));
@@ -46,19 +50,19 @@ function App() {
           <Route path="/ingredients/:id" element={<IngredientPage />} />
         </Route>
         <Route
-          path="/login"
+          path="login"
           element={<OnlyUnAuthorized component={<LoginPage />} />}
         />
         <Route
-          path="/register"
+          path="register"
           element={<OnlyUnAuthorized component={<RegisterPage />} />}
         />
         <Route
-          path="/forgot-password"
+          path="forgot-password"
           element={<OnlyUnAuthorized component={<ForgotPage />} />}
         />
         <Route
-          path="/reset-password"
+          path="reset-password"
           element={<OnlyAfterEmailCheck component={<ResetPage />} />}
         />
         <Route
@@ -76,7 +80,7 @@ function App() {
           />
         </Route>
       </Routes>
-      {state?.backgroundLocation && IsModalOpen && (
+      {state?.backgroundLocation && location.hash === '#modal-ingredient' && (
         <Routes>
           <Route
             path="ingredients/:id"

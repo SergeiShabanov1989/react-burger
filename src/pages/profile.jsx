@@ -7,9 +7,12 @@ import {
 import profileStyles from './profile.module.css';
 import { validateEmail } from '../components/utils/validate';
 import { updateUserProfile } from '../services/user/actions';
+import { getIsLoading } from '../services/user/reducer';
+import { Preloader } from '../components/preloader/preloader';
 
 export function ProfilePage() {
   const { user } = useSelector((state) => state.user);
+  const isLoading = useSelector(getIsLoading);
   const dispatch = useDispatch();
   const [formValue, setFormValue] = useState({
     name: '',
@@ -99,7 +102,7 @@ export function ProfilePage() {
     setInputDisabled(true);
   };
 
-  return (
+  return isLoading ? <Preloader /> : (
     <div>
       <form className={`${profileStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input

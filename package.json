@@ -29,6 +29,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "homepage": "http://localhost:3000/ingredients",
   "eslintConfig": {
     "extends": [
       "react-app",

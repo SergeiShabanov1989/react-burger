@@ -1,20 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getIngredients } from '../services/burger-ingredients/actions';
 import { Preloader } from '../components/preloader/preloader';
 
 import ingredientStyles from './ingredient.module.css';
 
 export const IngredientPage = () => {
-  const dispatch = useDispatch();
   const { id } = useParams();
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
   const { ingredients, isLoading } = useSelector((state) => state.ingredients);
-
   const getIngredientById = (id) => {
     return ingredients.find((ingredient) => ingredient._id === id);
   };
