@@ -1,0 +1,26 @@
+.ingredient_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ingredient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.calories_wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  list-style: none;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

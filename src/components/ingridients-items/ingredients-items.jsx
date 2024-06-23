@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
+import { useLocation } from 'react-router-dom';
 import {
   CurrencyIcon,
   Counter,

@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
+import { useNavigate } from 'react-router-dom';
 import {
   ConstructorElement,
   Button,
@@ -12,11 +13,14 @@ import { setIsModalOrderOpen } from '../../services/order-details/reducer';
 import { ingredientsPriceSelector } from '../../services/constructor-ingredients/selectors';
 import { setConstructorIngredients } from '../../services/constructor-ingredients/reducer';
 import { sendOrder } from '../../services/constructor-ingredients/actions';
+import { getUser } from '../../services/user/reducer';
 
 import ConstructorStyles from './burger-constructor.module.css';
 
 export const BurgerConstructor = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(getUser);
   const { IsModalOpen } = useSelector((state) => state.orderDetails);
   const { constructorIngredients, buns } = useSelector(
     (state) => state.constructorIngredients
@@ -34,11 +38,15 @@ export const BurgerConstructor = () => {
   });
 
   const submitOrder = () => {
-    dispatch(setIsModalOrderOpen(true));
+    if (!user) {
+      return navigate('/login');
+    } else {
+      dispatch(setIsModalOrderOpen(true));
     const pushOrder = constructorIngredients.map(
       (ingredient) => ingredient._id
     );
-    dispatch(sendOrder({ ingredients: pushOrder }));
+    dispatch(sendOrder({ ingredients: pushOrder }))
+    }
   };
 
   const onclose = () => {
