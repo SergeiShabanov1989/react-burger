@@ -36,6 +36,7 @@ export const checkUserAuth = createAsyncThunk(
             refreshToken().then(() => {
               getUser().then((data) => {
                 dispatch(setUser(data));
+                dispatch(setIsLoading(false));
               });
             });
           }
@@ -46,8 +47,6 @@ export const checkUserAuth = createAsyncThunk(
     } else {
       dispatch(setIsAuthChecked(true));
     }
-
-    dispatch(setIsLoading(false));
   }
 );
 

@@ -5,90 +5,44 @@ import {
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import profileStyles from './profile.module.css';
-import { validateEmail } from '../components/utils/validate';
 import { updateUserProfile } from '../services/user/actions';
 import { getIsLoading } from '../services/user/reducer';
 import { Preloader } from '../components/preloader/preloader';
+import { useForm } from '../hooks/useform';
 
 export function ProfilePage() {
   const { user } = useSelector((state) => state.user);
   const isLoading = useSelector(getIsLoading);
   const dispatch = useDispatch();
-  const [formValue, setFormValue] = useState({
+  const { values, handleChange, error, setError, setValues } = useForm({
     name: '',
     email: '',
     password: '',
-  });
-  const [error, setError] = useState({
-    name: null,
-    email: null,
-    password: null,
   });
   const [isInputDisabled, setInputDisabled] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
     if (user) {
-      setFormValue({
+      setValues({
         name: user.name,
         email: user.email,
         password: '',
       });
     }
-  }, [user]);
+  }, [user, setValues]);
 
   useEffect(() => {
-    if (user.email === formValue.email && user.name === formValue.name) {
+    if (user.email === values.email && user.name === values.name) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
-  }, [formValue, user]);
+  }, [values, user]);
 
   const handleInput = (e) => {
     e.preventDefault();
-    setFormValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    validateInput(e);
-  };
-
-  const validateInput = (e) => {
-    let { name, value } = e.target;
-    setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
-
-      switch (name) {
-        case 'name':
-          if (!value) {
-            stateObj[name] = 'Обязательное поле';
-          } else if (value.length < 4) {
-            stateObj[name] = 'Минимальная длина 4 символа';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        case 'email':
-          if (!value || !validateEmail(value)) {
-            stateObj[name] = 'Некорректная почта';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        case 'password':
-          if (!value || value.length < 6) {
-            stateObj[name] = 'Минимальная длина пароля 6 символов';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      return stateObj;
-    });
+    handleChange(e);
   };
 
   const handleIconClick = () => {
@@ -97,12 +51,14 @@ export function ProfilePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUserProfile(formValue));
+    dispatch(updateUserProfile(values));
 
     setInputDisabled(true);
   };
 
-  return isLoading ? <Preloader /> : (
+  return isLoading ? (
+    <Preloader />
+  ) : (
     <div>
       <form className={`${profileStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input
@@ -112,7 +68,7 @@ export function ProfilePage() {
           type="text"
           {...(isInputDisabled && { icon: 'EditIcon' })}
           name="name"
-          value={formValue.name || user?.name}
+          value={values.name || user?.name}
           onIconClick={handleIconClick}
           onChange={handleInput}
           {...(error.name && { error: true })}
@@ -125,7 +81,7 @@ export function ProfilePage() {
           placeholder="Логин"
           type="email"
           name="email"
-          value={formValue.email || user?.email}
+          value={values.email || user?.email}
           errorText={error.email}
           onIconClick={handleIconClick}
           onChange={handleInput}
@@ -138,7 +94,7 @@ export function ProfilePage() {
           type="password"
           placeholder="Пароль"
           name="password"
-          value={formValue.password}
+          value={values.password}
           onChange={handleInput}
           onIconClick={handleIconClick}
           {...(isInputDisabled && { icon: 'EditIcon' })}
@@ -154,11 +110,7 @@ export function ProfilePage() {
               type="button"
               onClick={() => {
                 setInputDisabled(true);
-                setFormValue({
-                  name: user?.name,
-                  email: user?.email,
-                  password: '',
-                });
+                setValues({ name: user.name, email: user.email, password: '' });
                 setError({ name: '', email: '', password: '' });
               }}
             >

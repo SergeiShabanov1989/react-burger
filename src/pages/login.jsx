@@ -6,23 +6,19 @@ import {
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
-import { validateEmail } from '../components/utils/validate';
 import { login } from '../services/user/actions';
-import { getIsError, getIsLoading } from '../services/user/reducer';
+import { getIsError, getIsLoading, setIsError } from '../services/user/reducer';
 import { Preloader } from '../components/preloader/preloader';
+import { useForm } from '../hooks/useform';
 
 export function LoginPage() {
-  const dispatch = useDispatch();
-  const isError = useSelector(getIsError);
-  const isLoading = useSelector(getIsLoading);
-  const [formValue, setFormValue] = useState({
+  const { values, handleChange, error } = useForm({
     email: '',
     password: '',
   });
-  const [error, setError] = useState({
-    email: null,
-    password: null,
-  });
+  const dispatch = useDispatch();
+  const isError = useSelector(getIsError);
+  const isLoading = useSelector(getIsLoading);
   const [showPassword, setShowPassword] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -36,38 +32,7 @@ export function LoginPage() {
 
   const handleInput = (e) => {
     e.preventDefault();
-    setFormValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    validateInput(e);
-  };
-
-  const validateInput = (e) => {
-    let { name, value } = e.target;
-    setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
-
-      switch (name) {
-        case 'email':
-          if (!value || !validateEmail(value)) {
-            stateObj[name] = 'Некорректная почта';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        case 'password':
-          if (!value || value.length < 6) {
-            stateObj[name] = 'Минимальная длина пароля 6 символов';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      return stateObj;
-    });
+    handleChange(e);
   };
 
   const handleIconClick = () => {
@@ -75,8 +40,9 @@ export function LoginPage() {
   };
 
   const handleSubmit = (e) => {
+    console.log(values);
     e.preventDefault();
-    dispatch(login(formValue));
+    dispatch(login(values));
   };
 
   return isLoading ? (
@@ -92,7 +58,7 @@ export function LoginPage() {
           placeholder="e-mail"
           type="email"
           name="email"
-          value={formValue.email}
+          value={values.email}
           errorText={error.email}
           required
           onChange={handleInput}
@@ -104,7 +70,7 @@ export function LoginPage() {
           {...(showPassword ? { type: 'text' } : { type: 'password' })}
           placeholder="Пароль"
           name="password"
-          value={formValue.password}
+          value={values.password}
           onChange={handleInput}
           onIconClick={handleIconClick}
           required
@@ -126,6 +92,7 @@ export function LoginPage() {
         <Link
           to="/register"
           className={`${loginStyles.link} text text_type_main-default ml-2`}
+          onClick={() => dispatch(setIsError(false))}
         >
           Зарегистрироваться
         </Link>

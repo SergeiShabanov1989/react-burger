@@ -6,16 +6,13 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { resetPassword } from '../components/utils/api';
+import { useForm } from '../hooks/useform';
 
 export function ResetPage() {
   const navigate = useNavigate();
-  const [formValue, setFormValue] = useState({
+  const { values, handleChange, error, setError } = useForm({
     password: '',
     token: '',
-  });
-  const [error, setError] = useState({
-    password: null,
-    token: null,
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,38 +28,7 @@ export function ResetPage() {
 
   const handleInput = (e) => {
     e.preventDefault();
-    setFormValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    validateInput(e);
-  };
-
-  const validateInput = (e) => {
-    let { name, value } = e.target;
-    setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
-
-      switch (name) {
-        case 'password':
-          if (!value || value.length < 6) {
-            stateObj[name] = 'Минимальная длина пароля 6 символов';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        case 'token':
-          if (!value) {
-            stateObj[name] = 'Обязательное поле';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      return stateObj;
-    });
+    handleChange(e);
   };
 
   const handleIconClick = () => {
@@ -72,14 +38,14 @@ export function ResetPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    resetPassword(formValue)
+    resetPassword(values)
       .then((res) => {
         if (res.success) {
           return navigate('/login');
         }
       })
       .catch((err) => {
-        setError({ token: "некорректный токен" });
+        setError({ token: 'некорректный токен' });
       });
   };
 
@@ -95,7 +61,7 @@ export function ResetPage() {
           {...(showPassword ? { type: 'text' } : { type: 'password' })}
           placeholder="Введите новый пароль"
           name="password"
-          value={formValue.password}
+          value={values.password}
           onChange={handleInput}
           onIconClick={handleIconClick}
           required
@@ -108,7 +74,7 @@ export function ResetPage() {
           placeholder="Введите код из письма"
           type="text"
           name="token"
-          value={formValue.token}
+          value={values.token}
           errorText={error.token}
           required
           onChange={handleInput}

@@ -1,24 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import registerStyles from './register.module.css';
-import { validateEmail } from '../components/utils/validate';
 import { register } from '../services/user/actions';
+import { getIsError, setIsError } from '../services/user/reducer';
+import { useForm } from '../hooks/useform';
 
 export function RegisterPage() {
   const dispatch = useDispatch();
-  const [formValue, setFormValue] = useState({
+  const isError = useSelector(getIsError);
+  const { values, handleChange, error } = useForm({
     name: '',
     email: '',
     password: '',
-  });
-  const [error, setError] = useState({
-    email: null,
-    password: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -33,48 +31,7 @@ export function RegisterPage() {
 
   const handleInput = (e) => {
     e.preventDefault();
-    setFormValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    validateInput(e);
-  };
-
-  const validateInput = (e) => {
-    let { name, value } = e.target;
-    setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
-
-      switch (name) {
-        case 'name':
-          if (!value) {
-            stateObj[name] = 'Обязательное поле';
-          } else if (value.length < 4) {
-            stateObj[name] = 'Минимальная длина 4 символа';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        case 'email':
-          if (!value || !validateEmail(value)) {
-            stateObj[name] = 'Некорректная почта';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        case 'password':
-          if (!value || value.length < 6) {
-            stateObj[name] = 'Минимальная длина пароля 6 символов';
-          } else {
-            stateObj[name] = '';
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      return stateObj;
-    });
+    handleChange(e);
   };
 
   const handleIconClick = () => {
@@ -83,7 +40,7 @@ export function RegisterPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(register(formValue));
+    dispatch(register(values));
   };
 
   return (
@@ -98,7 +55,7 @@ export function RegisterPage() {
           placeholder="Имя"
           type="text"
           name="name"
-          value={formValue.name}
+          value={values.name}
           required
           onChange={handleInput}
           {...(error.name && { error: true })}
@@ -109,7 +66,7 @@ export function RegisterPage() {
           placeholder="e-mail"
           type="email"
           name="email"
-          value={formValue.email}
+          value={values.email}
           errorText={error.email}
           required
           onChange={handleInput}
@@ -121,7 +78,7 @@ export function RegisterPage() {
           {...(showPassword ? { type: 'text' } : { type: 'password' })}
           placeholder="Пароль"
           name="password"
-          value={formValue.password}
+          value={values.password}
           onChange={handleInput}
           onIconClick={handleIconClick}
           required
@@ -129,7 +86,11 @@ export function RegisterPage() {
           errorText={error.password}
           {...(error.password && { error: true })}
         />
-
+        {isError && (
+          <p className="text text_type_main-default text_color_error mb-6">
+            Такой пользователь уже существует
+          </p>
+        )}
         <Button disabled={isDisabled} htmlType="submit" extraClass="mb-20">
           Зарегистрироваться
         </Button>
@@ -139,6 +100,7 @@ export function RegisterPage() {
         <Link
           to="/login"
           className={`${registerStyles.link} text text_type_main-default ml-2`}
+          onClick={() => dispatch(setIsError(false))}
         >
           Войти
         </Link>

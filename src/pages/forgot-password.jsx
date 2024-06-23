@@ -6,18 +6,15 @@ import {
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { validateEmail } from '../components/utils/validate';
 import { forgotPassword } from '../components/utils/api';
-import {setIsEmailChecked} from '../services/user/reducer';
+import { setIsEmailChecked } from '../services/user/reducer';
+import { useForm } from '../hooks/useform';
 
 export function ForgotPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [formValue, setFormValue] = useState({
+  const { values, handleChange, error } = useForm({
     email: '',
-  });
-  const [error, setError] = useState({
-    email: null,
   });
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -31,33 +28,12 @@ export function ForgotPage() {
 
   const handleInput = (e) => {
     e.preventDefault();
-    setFormValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    validateInput(e);
-  };
-
-  const validateInput = (e) => {
-    let { name, value } = e.target;
-    setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
-
-      switch (name) {
-        case 'email':
-          if (!value || !validateEmail(value)) {
-            stateObj[name] = 'Некорректная почта';
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      return stateObj;
-    });
+    handleChange(e);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    forgotPassword(formValue)
+    forgotPassword(values)
       .then((res) => {
         if (res.success) {
           return dispatch(setIsEmailChecked(true));
@@ -82,7 +58,7 @@ export function ForgotPage() {
           placeholder="Укажите e-mail"
           type="email"
           name="email"
-          value={formValue.email}
+          value={values.email}
           errorText={error.email}
           required
           onChange={handleInput}

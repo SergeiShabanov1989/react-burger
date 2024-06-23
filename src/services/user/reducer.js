@@ -22,6 +22,9 @@ export const userSlice = createSlice({
     setIsEmailChecked: (state, action) => {
       state.isEmailChecked = action.payload;
     },
+    setIsError: (state, action) => {
+      state.isError = action.payload;
+    },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
@@ -42,6 +45,11 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
         state.isAuthChecked = true;
       })
+      .addCase(register.rejected, (state) => {
+        state.user = null;
+        state.isAuthChecked = true;
+        state.isError = true;
+      })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthChecked = true;
@@ -61,8 +69,13 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUser, setIsAuthChecked, setIsEmailChecked, setIsLoading } =
-  userSlice.actions;
+export const {
+  setUser,
+  setIsAuthChecked,
+  setIsEmailChecked,
+  setIsLoading,
+  setIsError,
+} = userSlice.actions;
 export const {
   getUser,
   getIsAuthChecked,
