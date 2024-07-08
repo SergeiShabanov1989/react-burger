@@ -1,10 +1,24 @@
 import { BASE_URL } from './constants';
+import {
+  TIngredient,
+  TToken,
+  TOrder,
+  TUser,
+  TResponse,
+  TRefreshToken,
+  TResponseBody,
+  TResetPassword,
+  TResetEmail,
+  TRegisterUser,
+  TUpdateUser,
+  TLoginUser,
+} from './types';
 
-export const checkResponse = (res) => {
+export const checkResponse = (res: Response): Promise<TResponse> => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-function request(url, options) {
+function request(url: string, options: TResponseBody): Promise<TResponse> {
   return fetch(url, options).then(checkResponse);
 }
 
@@ -17,7 +31,7 @@ export const getIngredientsFromServer = async () => {
   });
 };
 
-export const sendOrderToServer = async (order) => {
+export const sendOrderToServer = async (order: TOrder) => {
   return request(`${BASE_URL}/orders`, {
     method: 'POST',
     headers: {
@@ -37,13 +51,16 @@ export const refreshToken = async () => {
       token: localStorage.getItem('refreshToken'),
     }),
   }).then((data) => {
-    localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
-    localStorage.setItem('refreshToken', data.refreshToken);
+    if (data && data.accessToken && data.refreshToken) {
+      localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+      localStorage.setItem('refreshToken', data.refreshToken);
+    }
+
     return data;
   });
 };
 
-export const loginUser = async (formValue) => {
+export const loginUser = async (formValue: TLoginUser) => {
   return request(`${BASE_URL}/auth/login`, {
     method: 'POST',
     headers: {
@@ -51,8 +68,10 @@ export const loginUser = async (formValue) => {
     },
     body: JSON.stringify(formValue),
   }).then((data) => {
-    localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
-    localStorage.setItem('refreshToken', data.refreshToken);
+    if (data && data.accessToken && data.refreshToken) {
+      localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+      localStorage.setItem('refreshToken', data.refreshToken);
+    }
     return data;
   });
 };
@@ -67,7 +86,7 @@ export const getUser = async () => {
   });
 };
 
-export const updateUser = async (formValue) => {
+export const updateUser = async (formValue: TUpdateUser) => {
   return request(`${BASE_URL}/auth/user`, {
     method: 'PATCH',
     headers: {
@@ -78,7 +97,7 @@ export const updateUser = async (formValue) => {
   });
 };
 
-export const registerUser = async (formValue) => {
+export const registerUser = async (formValue: TRegisterUser) => {
   return request(`${BASE_URL}/auth/register`, {
     method: 'POST',
     headers: {
@@ -86,8 +105,10 @@ export const registerUser = async (formValue) => {
     },
     body: JSON.stringify(formValue),
   }).then((data) => {
-    localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
-    localStorage.setItem('refreshToken', data.refreshToken);
+    if (data && data.accessToken && data.refreshToken) {
+      localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+      localStorage.setItem('refreshToken', data.refreshToken);
+    }
     return data;
   });
 };
@@ -106,7 +127,7 @@ export const logoutUser = async () => {
   });
 };
 
-export const forgotPassword = async (formValue) => {
+export const forgotPassword = async (formValue: TResetEmail) => {
   return request(`${BASE_URL}/password-reset`, {
     method: 'POST',
     headers: {
@@ -116,7 +137,7 @@ export const forgotPassword = async (formValue) => {
   });
 };
 
-export const resetPassword = async (formValue) => {
+export const resetPassword = async (formValue: TResetPassword) => {
   return request(`${BASE_URL}/password-reset/reset`, {
     method: 'POST',
     headers: {

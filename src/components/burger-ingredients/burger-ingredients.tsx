@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useRef, UIEvent } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';
 import {
@@ -8,34 +8,35 @@ import {
   mainSelector,
   sauceSelector,
 } from '../../services/burger-ingredients/selectors';
+import { TIngredient } from '../utils/types';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = () => {
+export const BurgerIngredients = (): JSX.Element => {
   const location = useLocation();
   const bunIngredients = useSelector(bunSelector);
   const mainIngredients = useSelector(mainSelector);
   const sauceIngredients = useSelector(sauceSelector);
   const [current, setCurrent] = useState('one');
-  const refBuns = useRef(null);
-  const refMain = useRef(null);
-  const refSauce = useRef(null);
-  const hoverBoundingRectBuns = refBuns.current?.getBoundingClientRect().top;
-  const hoverBoundingRectMain = refMain.current?.getBoundingClientRect().top;
-  const hoverBoundingRectSauce = refSauce.current?.getBoundingClientRect().top;
+  const refBuns = useRef<HTMLDivElement | null>(null);
+  const refMain = useRef<HTMLDivElement | null>(null);
+  const refSauce = useRef<HTMLDivElement | null>(null);
+  const hoverBoundingRectBuns = refBuns.current?.getBoundingClientRect()?.top;
+  const hoverBoundingRectMain = refMain.current?.getBoundingClientRect()?.top;
+  const hoverBoundingRectSauce = refSauce.current?.getBoundingClientRect()?.top;
 
-  const handleScroll = (e) => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (
-      e.currentTarget.scrollTop >= hoverBoundingRectBuns &&
-      e.currentTarget.scrollTop < hoverBoundingRectSauce
+      e.currentTarget.scrollTop >= (hoverBoundingRectBuns ?? 0) &&
+      e.currentTarget.scrollTop < (hoverBoundingRectSauce ?? 0)
     ) {
       setCurrent('one');
     } else if (
-      e.currentTarget.scrollTop >= hoverBoundingRectSauce &&
-      e.currentTarget.scrollTop < hoverBoundingRectMain
+      e.currentTarget.scrollTop >= (hoverBoundingRectSauce ?? 0) &&
+      e.currentTarget.scrollTop < (hoverBoundingRectMain ?? 0)
     ) {
       setCurrent('two');
-    } else if (e.currentTarget.scrollTop > hoverBoundingRectMain) {
+    } else if (e.currentTarget.scrollTop > (hoverBoundingRectMain ?? 0)) {
       setCurrent('three');
     }
   };
@@ -88,15 +89,18 @@ export const BurgerIngredients = () => {
           Булки
         </h2>
         <div className={`${ingredientsStyles.items_container}`}>
-          {bunIngredients.map((ingredient) => (
-              <Link
-                key={ingredient._id}
-                to={{ pathname: `/ingredients/${ingredient._id}`, hash: '#modal-ingredient' }}
-                state={{ backgroundLocation: location }}
-                className={ingredientsStyles.link}
-              >
-                <IngredientsItems key={ingredient._id} ingredient={ingredient} />
-              </Link>
+          {bunIngredients.map((ingredient: TIngredient) => (
+            <Link
+              key={ingredient._id}
+              to={{
+                pathname: `/ingredients/${ingredient._id}`,
+                hash: '#modal-ingredient',
+              }}
+              state={{ backgroundLocation: location }}
+              className={ingredientsStyles.link}
+            >
+              <IngredientsItems key={ingredient._id} ingredient={ingredient} />
+            </Link>
           ))}
         </div>
         <h2
@@ -107,10 +111,13 @@ export const BurgerIngredients = () => {
           Соусы
         </h2>
         <div className={ingredientsStyles.items_container}>
-          {sauceIngredients.map((ingredient) => (
+          {sauceIngredients.map((ingredient: TIngredient) => (
             <Link
               key={ingredient._id}
-              to={{ pathname: `/ingredients/${ingredient._id}`, hash: '#modal-ingredient' }}
+              to={{
+                pathname: `/ingredients/${ingredient._id}`,
+                hash: '#modal-ingredient',
+              }}
               state={{ backgroundLocation: location }}
               className={ingredientsStyles.link}
             >
@@ -126,10 +133,13 @@ export const BurgerIngredients = () => {
           Начинки
         </h2>
         <div className={ingredientsStyles.items_container}>
-          {mainIngredients.map((ingredient) => (
+          {mainIngredients.map((ingredient: TIngredient) => (
             <Link
               key={ingredient._id}
-              to={{ pathname: `/ingredients/${ingredient._id}`, hash: '#modal-ingredient' }}
+              to={{
+                pathname: `/ingredients/${ingredient._id}`,
+                hash: '#modal-ingredient',
+              }}
               state={{ backgroundLocation: location }}
               className={ingredientsStyles.link}
             >

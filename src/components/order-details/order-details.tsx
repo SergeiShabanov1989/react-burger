@@ -2,7 +2,8 @@ import { useSelector } from 'react-redux';
 import orderDetailsStyles from './order-details.module.css';
 import imageDone from '../../images/done.png';
 
-export const OrderDetails = () => {
+export const OrderDetails = (): JSX.Element => {
+  // @ts-ignore
   const { order } = useSelector((state) => state.constructorIngredients);
   return (
     <div className={`${orderDetailsStyles.order_wrapper} mt-15 mb-15`}>

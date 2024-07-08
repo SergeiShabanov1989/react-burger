@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import resetStyles from './reset-password.module.css';
 import {
   Button,
@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { resetPassword } from '../components/utils/api';
 import { useForm } from '../hooks/useform';
 
-export function ResetPage() {
+export function ResetPage(): JSX.Element {
   const navigate = useNavigate();
   const { values, handleChange, error, setError } = useForm({
     password: '',
@@ -26,7 +26,7 @@ export function ResetPage() {
     }
   }, [error]);
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     handleChange(e);
   };
@@ -35,18 +35,28 @@ export function ResetPage() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    resetPassword(values)
-      .then((res) => {
-        if (res.success) {
-          return navigate('/login');
-        }
+    if (values.password && values.token) {
+      resetPassword({
+        password: values.password,
+        token: values.token,
       })
-      .catch((err) => {
-        setError({ token: 'некорректный токен' });
-      });
+        .then((res) => {
+          if (res.success) {
+            return navigate('/login');
+          }
+        })
+        .catch((err) => {
+          setError({
+            name: '',
+            email: '',
+            password: '',
+            token: 'некорректный токен',
+          });
+        });
+    }
   };
 
   return (
@@ -56,29 +66,33 @@ export function ResetPage() {
       </h1>
       <form className={`${resetStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           {...(showPassword ? { icon: 'HideIcon' } : { icon: 'ShowIcon' })}
           extraClass="mb-6"
           {...(showPassword ? { type: 'text' } : { type: 'password' })}
           placeholder="Введите новый пароль"
           name="password"
-          value={values.password}
+          value={values?.password || ''}
           onChange={handleInput}
           onIconClick={handleIconClick}
           required
           minLength={6}
-          errorText={error.password}
-          {...(error.password && { error: true })}
+          errorText={error?.password || ''}
+          {...(error.password ? { error: true } : {})}
         />
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           extraClass="mb-6"
           placeholder="Введите код из письма"
           type="text"
           name="token"
-          value={values.token}
-          errorText={error.token}
+          value={values?.token || ''}
+          errorText={error?.password || ''}
           required
           onChange={handleInput}
-          {...(error.token && { error: true })}
+          {...(error.password ? { error: true } : {})}
         />
 
         <Button disabled={isDisabled} htmlType="submit" extraClass="mb-20">

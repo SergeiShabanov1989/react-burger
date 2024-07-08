@@ -14,15 +14,18 @@ import { ingredientsPriceSelector } from '../../services/constructor-ingredients
 import { setConstructorIngredients } from '../../services/constructor-ingredients/reducer';
 import { sendOrder } from '../../services/constructor-ingredients/actions';
 import { getUser } from '../../services/user/reducer';
+import { TConstructorIngredient } from '../utils/types';
 
 import ConstructorStyles from './burger-constructor.module.css';
 
-export const BurgerConstructor = () => {
+export const BurgerConstructor = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(getUser);
+  // @ts-ignore
   const { IsModalOpen } = useSelector((state) => state.orderDetails);
   const { constructorIngredients, buns } = useSelector(
+    // @ts-ignore
     (state) => state.constructorIngredients
   );
   const fullPriceIngredients = useSelector(ingredientsPriceSelector);
@@ -42,10 +45,11 @@ export const BurgerConstructor = () => {
       return navigate('/login');
     } else {
       dispatch(setIsModalOrderOpen(true));
-    const pushOrder = constructorIngredients.map(
-      (ingredient) => ingredient._id
-    );
-    dispatch(sendOrder({ ingredients: pushOrder }))
+      const pushOrder = constructorIngredients.map(
+        (ingredient: TConstructorIngredient) => ingredient._id
+      );
+      // @ts-ignore
+      dispatch(sendOrder({ ingredients: pushOrder }));
     }
   };
 
@@ -73,14 +77,16 @@ export const BurgerConstructor = () => {
           )}
         </div>
         <div className={`${ConstructorStyles.constructor}  mb-4`}>
-          {constructorIngredients.map((ingredient, index) => (
-            <ConstructorIngredients
-              key={ingredient.key}
-              id={ingredient._id}
-              ingredient={ingredient}
-              index={index}
-            />
-          ))}
+          {constructorIngredients.map(
+            (ingredient: TConstructorIngredient, index: number) => (
+              <ConstructorIngredients
+                key={ingredient.key}
+                id={ingredient._id}
+                ingredient={ingredient}
+                index={index}
+              />
+            )
+          )}
         </div>
 
         <div className={`${ConstructorStyles.item_wrapper} pl-6`}>

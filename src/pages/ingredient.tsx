@@ -1,17 +1,19 @@
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Preloader } from '../components/preloader/preloader';
+import { TIngredient } from '../components/utils/types';
 
 import ingredientStyles from './ingredient.module.css';
 
 export const IngredientPage = () => {
   const { id } = useParams();
+  //@ts-ignore
   const { ingredients, isLoading } = useSelector((state) => state.ingredients);
-  const getIngredientById = (id) => {
-    return ingredients.find((ingredient) => ingredient._id === id);
+  const getIngredientById = (id: string) => {
+    return ingredients.find((ingredient: TIngredient) => ingredient._id === id);
   };
 
-  const ingredient = getIngredientById(id);
+  const ingredient = id ? getIngredientById(id) : undefined;
 
   return isLoading ? (
     <Preloader />

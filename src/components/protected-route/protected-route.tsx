@@ -6,11 +6,17 @@ import {
   getIsEmailChecked,
 } from '../../services/user/reducer';
 import { Preloader } from '../preloader/preloader';
+
+type TProtectedRouteProps = {
+  onlyUnauthorized?: boolean;
+  onlyAfterEmailCheck?: boolean;
+  component: JSX.Element;
+}
 const ProtectedRoute = ({
   onlyUnauthorized = false,
   onlyAfterEmailCheck = false,
   component,
-}) => {
+}: TProtectedRouteProps): JSX.Element => {
   const isAuthChecked = useSelector(getIsAuthChecked);
   const user = useSelector(getUser);
   const isEmailChecked = useSelector(getIsEmailChecked);
@@ -32,14 +38,14 @@ const ProtectedRoute = ({
   return component;
 };
 
-export const OnlyUnAuthorized = ({ component }) =>
+export const OnlyUnAuthorized = ({ component }: TProtectedRouteProps) =>
   ProtectedRoute({
     onlyUnauthorized: true,
     onlyAfterEmailCheck: false,
     component,
   });
 
-export const OnlyAfterEmailCheck = ({ component }) =>
+export const OnlyAfterEmailCheck = ({ component }: TProtectedRouteProps) =>
   ProtectedRoute({
     onlyUnauthorized: true,
     onlyAfterEmailCheck: true,

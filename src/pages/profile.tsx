@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -10,7 +10,8 @@ import { getIsLoading } from '../services/user/reducer';
 import { Preloader } from '../components/preloader/preloader';
 import { useForm } from '../hooks/useform';
 
-export function ProfilePage() {
+export function ProfilePage(): JSX.Element {
+  // @ts-ignore
   const { user } = useSelector((state) => state.user);
   const isLoading = useSelector(getIsLoading);
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ export function ProfilePage() {
     }
   }, [values, user]);
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     handleChange(e);
   };
@@ -49,9 +50,18 @@ export function ProfilePage() {
     setInputDisabled(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateUserProfile(values));
+    if (values.name || values.email || values.password) {
+      dispatch(
+        // @ts-ignore
+        updateUserProfile({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        })
+      );
+    }
 
     setInputDisabled(true);
   };
@@ -62,6 +72,8 @@ export function ProfilePage() {
     <div>
       <form className={`${profileStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           minLength={4}
           extraClass="mb-6"
           placeholder="Имя"
@@ -72,34 +84,38 @@ export function ProfilePage() {
           onIconClick={handleIconClick}
           onChange={handleInput}
           {...(error.name && { error: true })}
-          errorText={error.name}
+          errorText={error?.name || ''}
           {...(isInputDisabled && { disabled: true })}
         />
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           extraClass="mb-6"
           {...(isInputDisabled && { icon: 'EditIcon' })}
           placeholder="Логин"
           type="email"
           name="email"
           value={values.email || user?.email}
-          errorText={error.email}
+          errorText={error?.email || ''}
           onIconClick={handleIconClick}
           onChange={handleInput}
           {...(error.email && { error: true })}
           {...(isInputDisabled && { disabled: true })}
         />
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           {...(isInputDisabled && { disabled: true })}
           extraClass="mb-6"
           type="password"
           placeholder="Пароль"
           name="password"
-          value={values.password}
+          value={values?.password || ''}
           onChange={handleInput}
           onIconClick={handleIconClick}
           {...(isInputDisabled && { icon: 'EditIcon' })}
           minLength={6}
-          errorText={error.password}
+          errorText={error?.password || ''}
           {...(error.password && { error: true })}
         />
 
@@ -111,7 +127,7 @@ export function ProfilePage() {
               onClick={() => {
                 setInputDisabled(true);
                 setValues({ name: user.name, email: user.email, password: '' });
-                setError({ name: '', email: '', password: '' });
+                setError({ name: '', email: '', password: '', token: '' });
               }}
             >
               Отмена

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -10,7 +10,7 @@ import { register } from '../services/user/actions';
 import { getIsError, setIsError } from '../services/user/reducer';
 import { useForm } from '../hooks/useform';
 
-export function RegisterPage() {
+export function RegisterPage(): JSX.Element {
   const dispatch = useDispatch();
   const isError = useSelector(getIsError);
   const { values, handleChange, error } = useForm({
@@ -29,7 +29,7 @@ export function RegisterPage() {
     }
   }, [error]);
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     handleChange(e);
   };
@@ -38,9 +38,18 @@ export function RegisterPage() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(register(values));
+    if (values.name && values.email && values.password) {
+      dispatch(
+        // @ts-ignore
+        register({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        })
+      );
+    }
   };
 
   return (
@@ -50,40 +59,46 @@ export function RegisterPage() {
       </h1>
       <form className={`${registerStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           minLength={4}
           extraClass="mb-6"
           placeholder="Имя"
           type="text"
           name="name"
-          value={values.name}
+          value={values?.name || ''}
           required
           onChange={handleInput}
           {...(error.name && { error: true })}
-          errorText={error.name}
+          errorText={error?.name || ''}
         />
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           extraClass="mb-6"
           placeholder="e-mail"
           type="email"
           name="email"
-          value={values.email}
-          errorText={error.email}
+          value={values?.email || ''}
+          errorText={error?.email || ''}
           required
           onChange={handleInput}
           {...(error.email && { error: true })}
         />
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           {...(showPassword ? { icon: 'HideIcon' } : { icon: 'ShowIcon' })}
           extraClass="mb-6"
           {...(showPassword ? { type: 'text' } : { type: 'password' })}
           placeholder="Пароль"
           name="password"
-          value={values.password}
+          value={values?.password || ''}
           onChange={handleInput}
           onIconClick={handleIconClick}
           required
           minLength={6}
-          errorText={error.password}
+          errorText={error?.password || ''}
           {...(error.password && { error: true })}
         />
         {isError && (

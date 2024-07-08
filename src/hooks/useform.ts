@@ -1,27 +1,34 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { validateEmail } from '../components/utils/validate';
 
-export function useForm(inputValues) {
+type TInputValues = {
+  name?: string | null;
+  email?: string | null;
+  password?: string | null;
+  token?: string | null;
+};
+
+export function useForm(inputValues: TInputValues) {
   const [values, setValues] = useState(inputValues);
 
-  const [error, setError] = useState({
+  const [error, setError] = useState<TInputValues>({
     name: null,
     email: null,
     password: null,
     token: null,
   });
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setValues({ ...values, [name]: value });
 
     validateInput(event);
   };
 
-  const validateInput = (e) => {
+  const validateInput = (e: ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
     setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
+      const stateObj = { ...prev, [name as keyof typeof prev]: '' };
 
       switch (name) {
         case 'name':
