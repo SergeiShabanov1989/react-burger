@@ -20,8 +20,6 @@ type TConstructorIngredients = {
   id: string;
 };
 
-type TDndItem = TConstructorIngredient & { index: number };
-
 export const ConstructorIngredients = ({
   ingredient,
   index,
@@ -33,16 +31,16 @@ export const ConstructorIngredients = ({
     // @ts-ignore
     (state) => state.constructorIngredients
   );
-  const [, drag] = useDrag({
+  const [, drag] = useDrag<Pick <TConstructorIngredients, 'id' | 'index'>, unknown>({
     type: 'ingredient',
     item: () => {
       return { id, index };
     },
   });
 
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<TConstructorIngredients, unknown>({
     accept: 'ingredient',
-    hover(ingredient: TDndItem, monitor) {
+    hover(ingredient, monitor) {
       const dragIndex = ingredient.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) {

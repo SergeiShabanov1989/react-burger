@@ -18,8 +18,8 @@ export function RegisterPage(): JSX.Element {
     email: '',
     password: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (error.email !== '' || error.password !== '' || error.name !== '') {

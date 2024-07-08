@@ -9,7 +9,7 @@ type TInputValues = {
 };
 
 export function useForm(inputValues: TInputValues) {
-  const [values, setValues] = useState(inputValues);
+  const [values, setValues] = useState<TInputValues>(inputValues);
 
   const [error, setError] = useState<TInputValues>({
     name: null,

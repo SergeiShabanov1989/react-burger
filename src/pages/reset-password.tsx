@@ -14,9 +14,9 @@ export function ResetPage(): JSX.Element {
     password: '',
     token: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (error.password !== '' || error.token !== '') {

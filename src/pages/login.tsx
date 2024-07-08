@@ -19,8 +19,8 @@ export function LoginPage(): JSX.Element {
   const dispatch = useDispatch();
   const isError = useSelector(getIsError);
   const isLoading = useSelector(getIsLoading);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (error.email !== '' || error.password !== '') {

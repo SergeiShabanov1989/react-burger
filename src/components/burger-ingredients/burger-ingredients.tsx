@@ -17,7 +17,7 @@ export const BurgerIngredients = (): JSX.Element => {
   const bunIngredients = useSelector(bunSelector);
   const mainIngredients = useSelector(mainSelector);
   const sauceIngredients = useSelector(sauceSelector);
-  const [current, setCurrent] = useState('one');
+  const [current, setCurrent] = useState<string>('one');
   const refBuns = useRef<HTMLDivElement | null>(null);
   const refMain = useRef<HTMLDivElement | null>(null);
   const refSauce = useRef<HTMLDivElement | null>(null);

@@ -16,7 +16,7 @@ export function ForgotPage(): JSX.Element {
   const { values, handleChange, error } = useForm({
     email: '',
   });
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (error.email !== '') {
