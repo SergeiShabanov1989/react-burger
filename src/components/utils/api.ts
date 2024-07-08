@@ -1,11 +1,9 @@
 import { BASE_URL } from './constants';
 import {
   TIngredient,
-  TToken,
   TOrder,
   TUser,
   TResponse,
-  TRefreshToken,
   TResponseBody,
   TResetPassword,
   TResetEmail,
@@ -14,15 +12,15 @@ import {
   TLoginUser,
 } from './types';
 
-export const checkResponse = (res: Response): Promise<TResponse> => {
+export const checkResponse = <T>(res: Response): Promise<T> => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-function request(url: string, options: TResponseBody): Promise<TResponse> {
-  return fetch(url, options).then(checkResponse);
+function request<T>(url: string, options: TResponseBody): Promise<T> {
+  return fetch(url, options).then(checkResponse<T>);
 }
 
-export const getIngredientsFromServer = async () => {
+export const getIngredientsFromServer = async (): Promise<Array<TIngredient>> => {
   return request(`${BASE_URL}/ingredients`, {
     method: 'GET',
     headers: {
@@ -31,7 +29,7 @@ export const getIngredientsFromServer = async () => {
   });
 };
 
-export const sendOrderToServer = async (order: TOrder) => {
+export const sendOrderToServer = async (order: TOrder): Promise<TOrder> => {
   return request(`${BASE_URL}/orders`, {
     method: 'POST',
     headers: {
@@ -41,8 +39,8 @@ export const sendOrderToServer = async (order: TOrder) => {
   });
 };
 
-export const refreshToken = async () => {
-  return request(`${BASE_URL}/auth/token`, {
+export const refreshToken = async (): Promise<Pick <TResponse, 'accessToken' | 'refreshToken'>> => {
+  return request<Pick <TResponse, 'accessToken' | 'refreshToken'>>(`${BASE_URL}/auth/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -60,8 +58,8 @@ export const refreshToken = async () => {
   });
 };
 
-export const loginUser = async (formValue: TLoginUser) => {
-  return request(`${BASE_URL}/auth/login`, {
+export const loginUser = async (formValue: TLoginUser): Promise<Pick <TResponse, 'accessToken' | 'refreshToken'>> => {
+  return request<Pick <TResponse, 'accessToken' | 'refreshToken'>>(`${BASE_URL}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -76,7 +74,7 @@ export const loginUser = async (formValue: TLoginUser) => {
   });
 };
 
-export const getUser = async () => {
+export const getUser = async (): Promise<TUser> => {
   return request(`${BASE_URL}/auth/user`, {
     method: 'GET',
     headers: {
@@ -86,7 +84,7 @@ export const getUser = async () => {
   });
 };
 
-export const updateUser = async (formValue: TUpdateUser) => {
+export const updateUser = async (formValue: TUpdateUser): Promise<TUser> => {
   return request(`${BASE_URL}/auth/user`, {
     method: 'PATCH',
     headers: {
@@ -97,8 +95,8 @@ export const updateUser = async (formValue: TUpdateUser) => {
   });
 };
 
-export const registerUser = async (formValue: TRegisterUser) => {
-  return request(`${BASE_URL}/auth/register`, {
+export const registerUser = async (formValue: TRegisterUser): Promise<Pick <TResponse, 'accessToken' | 'refreshToken'>> => {
+  return request<Pick <TResponse, 'accessToken' | 'refreshToken'>>(`${BASE_URL}/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -113,8 +111,8 @@ export const registerUser = async (formValue: TRegisterUser) => {
   });
 };
 
-export const logoutUser = async () => {
-  return request(`${BASE_URL}/auth/logout`, {
+export const logoutUser = async (): Promise<TResponse> => {
+  return request<TResponse>(`${BASE_URL}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -127,7 +125,7 @@ export const logoutUser = async () => {
   });
 };
 
-export const forgotPassword = async (formValue: TResetEmail) => {
+export const forgotPassword = async (formValue: TResetEmail): Promise<TResponse> => {
   return request(`${BASE_URL}/password-reset`, {
     method: 'POST',
     headers: {
@@ -137,7 +135,7 @@ export const forgotPassword = async (formValue: TResetEmail) => {
   });
 };
 
-export const resetPassword = async (formValue: TResetPassword) => {
+export const resetPassword = async (formValue: TResetPassword): Promise<TResponse> => {
   return request(`${BASE_URL}/password-reset/reset`, {
     method: 'POST',
     headers: {

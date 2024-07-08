@@ -44,14 +44,6 @@ export type TUser = {
   name: string;
 }
 
-export type TToken = {
-  accessToken: string;
-}
-
-export type TRefreshToken = {
-  refreshToken: string;
-}
-
 export type TResponse = {
   success: boolean;
   message?: string;
