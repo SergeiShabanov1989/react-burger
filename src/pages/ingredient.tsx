@@ -10,7 +10,7 @@ export const IngredientPage = () => {
   //@ts-ignore
   const { ingredients, isLoading } = useSelector((state) => state.ingredients);
   const getIngredientById = (id: string) => {
-    return ingredients.find((ingredient: TIngredient) => ingredient._id === id);
+    return ingredients.find((ingredient: TIngredient): boolean => ingredient._id === id);
   };
 
   const ingredient = id ? getIngredientById(id) : undefined;

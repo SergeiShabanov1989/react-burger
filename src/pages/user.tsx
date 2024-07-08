@@ -6,7 +6,7 @@ import { logout } from '../services/user/actions';
 export function UserPage(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     // @ts-ignore
     dispatch(logout());
   };

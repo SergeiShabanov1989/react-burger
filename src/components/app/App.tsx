@@ -37,7 +37,7 @@ function App(): React.JSX.Element {
     dispatch(getIngredients());
   }, []);
 
-  const onclose = () => {
+  const onclose = (): void => {
     dispatch(setIsModalIngredientOpen(false));
     navigate(-1);
   };

@@ -26,12 +26,12 @@ export function ForgotPage(): JSX.Element {
     }
   }, [error]);
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     handleChange(e);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (values.email) {
       forgotPassword({ email: values.email })

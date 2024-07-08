@@ -25,7 +25,7 @@ export const BurgerIngredients = (): JSX.Element => {
   const hoverBoundingRectMain = refMain.current?.getBoundingClientRect()?.top;
   const hoverBoundingRectSauce = refSauce.current?.getBoundingClientRect()?.top;
 
-  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>): void => {
     if (
       e.currentTarget.scrollTop >= (hoverBoundingRectBuns ?? 0) &&
       e.currentTarget.scrollTop < (hoverBoundingRectSauce ?? 0)

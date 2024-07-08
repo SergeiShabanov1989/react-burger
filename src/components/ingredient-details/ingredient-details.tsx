@@ -13,7 +13,7 @@ export const IngredientDetails = (): JSX.Element => {
   // @ts-ignore
   const { ingredients, isLoading } = useSelector((state) => state.ingredients);
 
-  const getIngredientById = (id: string) => {
+  const getIngredientById = (id: string): TIngredient => {
     return ingredients.find((ingredient: TIngredient) => ingredient._id === id);
   };
 

@@ -29,16 +29,16 @@ export function RegisterPage(): JSX.Element {
     }
   }, [error]);
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     handleChange(e);
   };
 
-  const handleIconClick = () => {
+  const handleIconClick = (): void => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (values.name && values.email && values.password) {
       dispatch(

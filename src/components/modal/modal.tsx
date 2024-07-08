@@ -14,7 +14,7 @@ type TModalProps = {
 
 export const Modal = ({ children, onClose }: TModalProps): JSX.Element => {
   useEffect(() => {
-    const closeOnEscModal = (e: KeyboardEvent) => {
+    const closeOnEscModal = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
         onClose();
       }

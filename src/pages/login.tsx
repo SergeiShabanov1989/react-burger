@@ -30,7 +30,7 @@ export function LoginPage(): JSX.Element {
     }
   }, [error]);
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     handleChange(e);
   };
@@ -39,7 +39,7 @@ export function LoginPage(): JSX.Element {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
     console.log(values);
     e.preventDefault();
     if (values.email && values.password) {

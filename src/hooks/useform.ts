@@ -18,14 +18,14 @@ export function useForm(inputValues: TInputValues) {
     token: null,
   });
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const { value, name } = event.target;
     setValues({ ...values, [name]: value });
 
     validateInput(event);
   };
 
-  const validateInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const validateInput = (e: ChangeEvent<HTMLInputElement>): void => {
     let { name, value } = e.target;
     setError((prev) => {
       const stateObj = { ...prev, [name as keyof typeof prev]: '' };

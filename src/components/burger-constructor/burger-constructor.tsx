@@ -40,7 +40,7 @@ export const BurgerConstructor = (): JSX.Element => {
     }),
   });
 
-  const submitOrder = () => {
+  const submitOrder = (): void => {
     if (!user) {
       return navigate('/login');
     } else {
@@ -53,7 +53,7 @@ export const BurgerConstructor = (): JSX.Element => {
     }
   };
 
-  const onclose = () => {
+  const onclose = (): void => {
     dispatch(setIsModalOrderOpen(false));
   };
 
