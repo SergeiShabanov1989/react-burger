@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -20,8 +20,8 @@ export function ProfilePage(): JSX.Element {
     email: '',
     password: '',
   });
-  const [isInputDisabled, setInputDisabled] = useState(true);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isInputDisabled, setInputDisabled] = useState<boolean>(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (user) {
@@ -50,7 +50,7 @@ export function ProfilePage(): JSX.Element {
     setInputDisabled(false);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (values.name || values.email || values.password) {
       dispatch(

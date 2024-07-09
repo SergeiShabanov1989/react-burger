@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -38,7 +38,7 @@ export function RegisterPage(): JSX.Element {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (values.name && values.email && values.password) {
       dispatch(

@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import loginStyles from './login.module.css';
 import {
@@ -35,11 +35,11 @@ export function LoginPage(): JSX.Element {
     handleChange(e);
   };
 
-  const handleIconClick = () => {
+  const handleIconClick = (): void => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     console.log(values);
     e.preventDefault();
     if (values.email && values.password) {

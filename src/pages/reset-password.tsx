@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import resetStyles from './reset-password.module.css';
 import {
   Button,
@@ -35,7 +35,7 @@ export function ResetPage(): JSX.Element {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     if (values.password && values.token) {

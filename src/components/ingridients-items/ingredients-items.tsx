@@ -35,7 +35,7 @@ export const IngredientsItems = ({
 
   const { image, name, price } = ingredient;
 
-  const handleOnClick = () => {
+  const handleOnClick = (): void => {
     dispatch(setViewableIngredient(ingredient));
     dispatch(setIsModalIngredientOpen(true));
   };

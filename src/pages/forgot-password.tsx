@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import forgotStyles from './forgot-password.module.css';
 import { useDispatch } from 'react-redux';
 import {
@@ -31,7 +31,7 @@ export function ForgotPage(): JSX.Element {
     handleChange(e);
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (values.email) {
       forgotPassword({ email: values.email })
