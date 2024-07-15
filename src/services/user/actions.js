@@ -53,7 +53,9 @@ export const checkUserAuth = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
   'user/updateUserProfile',
   async (formValue, { dispatch }) => {
-    await updateUser(formValue).catch((err) => {
+    await updateUser(formValue).then((data)=>{
+      dispatch(setUser(data));
+    }).catch((err) => {
       if (!err.success) {
         dispatch(setIsLoading(true));
         refreshToken().then(() => {

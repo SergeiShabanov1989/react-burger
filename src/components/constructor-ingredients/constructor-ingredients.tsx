@@ -1,33 +1,44 @@
 import { useRef } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../utils/prop-types';
 import {
   deleteIngredients,
   moveIngredient,
 } from '../../services/constructor-ingredients/reducer';
 
+import { TConstructorIngredient } from '../utils/types';
+
 import constructorIngredientsStyles from './constructor-ingredients.module.css';
 
-export const ConstructorIngredients = ({ ingredient, index, id }) => {
-  const ref = useRef(null);
+type TConstructorIngredients = {
+  ingredient: TConstructorIngredient;
+  index: number;
+  id: string;
+};
+
+export const ConstructorIngredients = ({
+  ingredient,
+  index,
+  id,
+}: TConstructorIngredients): JSX.Element => {
+  const ref = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
   const { constructorIngredients } = useSelector(
+    // @ts-ignore
     (state) => state.constructorIngredients
   );
-  const [, drag] = useDrag({
+  const [, drag] = useDrag<Pick <TConstructorIngredients, 'id' | 'index'>, unknown>({
     type: 'ingredient',
     item: () => {
       return { id, index };
     },
   });
 
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<TConstructorIngredients, unknown>({
     accept: 'ingredient',
     hover(ingredient, monitor) {
       const dragIndex = ingredient.index;
@@ -36,15 +47,19 @@ export const ConstructorIngredients = ({ ingredient, index, id }) => {
         return;
       }
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
+      if (hoverBoundingRect) {
+        const hoverMiddleY =
+          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+        const clientOffset = monitor.getClientOffset();
+        if (clientOffset) {
+          const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+          if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+            return;
+          }
+          if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+            return;
+          }
+        }
       }
       const ingredients = [...constructorIngredients];
       ingredients.splice(index, 0, ingredients.splice(ingredient.index, 1)[0]);
@@ -71,10 +86,4 @@ export const ConstructorIngredients = ({ ingredient, index, id }) => {
       </div>
     </>
   );
-};
-
-ConstructorIngredients.propTypes = {
-  ingredient: PropTypes.shape(ingredientType.isRequired),
-  index: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
 };

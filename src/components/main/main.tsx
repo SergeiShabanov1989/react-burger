@@ -5,7 +5,7 @@ import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 
 import mainStyles from './main.module.css';
 
-export const Main = () => {
+export const Main = (): JSX.Element => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={mainStyles.main}>

@@ -8,7 +8,7 @@ import {
 import headerStyles from './app-header.module.css';
 import { NavLink } from 'react-router-dom';
 
-export const AppHeader = () => {
+export const AppHeader = (): JSX.Element => {
   return (
     <div className={headerStyles.header_container}>
       <header className={headerStyles.header}>
@@ -52,7 +52,7 @@ export const AppHeader = () => {
             </li>
           </ul>
 
-          <Logo type="primary" />
+          <Logo />
         </nav>
         <nav className={`${headerStyles.menu}`}>
           <ul className={headerStyles.list}>

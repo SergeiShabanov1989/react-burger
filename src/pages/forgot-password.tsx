@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import forgotStyles from './forgot-password.module.css';
 import { useDispatch } from 'react-redux';
 import {
@@ -10,13 +10,13 @@ import { forgotPassword } from '../components/utils/api';
 import { setIsEmailChecked } from '../services/user/reducer';
 import { useForm } from '../hooks/useform';
 
-export function ForgotPage() {
+export function ForgotPage(): JSX.Element {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { values, handleChange, error } = useForm({
     email: '',
   });
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (error.email !== '') {
@@ -26,25 +26,27 @@ export function ForgotPage() {
     }
   }, [error]);
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     handleChange(e);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    forgotPassword(values)
-      .then((res) => {
-        if (res.success) {
-          return dispatch(setIsEmailChecked(true));
-        }
-      })
-      .then(() => {
-        navigate('/reset-password');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (values.email) {
+      forgotPassword({ email: values.email })
+        .then((res) => {
+          if (res.success) {
+            return dispatch(setIsEmailChecked(true));
+          }
+        })
+        .then(() => {
+          navigate('/reset-password');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -54,12 +56,14 @@ export function ForgotPage() {
       </h1>
       <form className={`${forgotStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           extraClass="mb-6"
           placeholder="Укажите e-mail"
           type="email"
           name="email"
-          value={values.email}
-          errorText={error.email}
+          value={values?.email || ''}
+          errorText={error?.email || ''}
           required
           onChange={handleInput}
           {...(error.email && { error: true })}

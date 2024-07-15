@@ -22,20 +22,22 @@ import {
   OnlyAfterEmailCheck,
 } from '../protected-route/protected-route';
 
-function App() {
+function App(): React.JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // @ts-ignore
     dispatch(checkUserAuth());
   }, [dispatch]);
 
   useEffect(() => {
+    // @ts-ignore
     dispatch(getIngredients());
   }, []);
 
-  const onclose = () => {
+  const onclose = (): void => {
     dispatch(setIsModalIngredientOpen(false));
     navigate(-1);
   };

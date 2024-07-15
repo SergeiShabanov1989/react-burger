@@ -8,9 +8,11 @@ import { Preloader } from '../components/preloader/preloader';
 
 export function HomePage() {
   const dispatch = useDispatch();
+  //@ts-ignore
   const { isError, isLoading } = useSelector((store) => store.ingredients);
 
   useEffect(() => {
+    //@ts-ignore
     dispatch(getIngredients());
   }, []);
 

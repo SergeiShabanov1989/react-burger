@@ -1,22 +1,25 @@
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
-import { useLocation } from 'react-router-dom';
 import {
   CurrencyIcon,
   Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../utils/prop-types';
 import {
   setViewableIngredient,
   setIsModalIngredientOpen,
 } from '../../services/viewable-ingredient/reducer';
+import { TIngredient } from '../utils/types';
 
 import ingredientsItemsStyles from './ingredients-items.module.css';
 
-export const IngredientsItems = ({ ingredient }) => {
+export const IngredientsItems = ({
+  ingredient,
+}: {
+  ingredient: TIngredient;
+}): React.JSX.Element => {
   const dispatch = useDispatch();
   const { constructorIngredients, buns } = useSelector(
+    // @ts-ignore
     (state) => state.constructorIngredients
   );
   const [, dragRef] = useDrag({
@@ -27,12 +30,12 @@ export const IngredientsItems = ({ ingredient }) => {
   const countBuns = buns !== null && buns._id === ingredient._id ? 2 : 0;
 
   const countIngredients = constructorIngredients.filter(
-    (i) => i._id === ingredient._id
+    (i: TIngredient) => i._id === ingredient._id
   ).length;
 
   const { image, name, price } = ingredient;
 
-  const handleOnClick = () => {
+  const handleOnClick = (): void => {
     dispatch(setViewableIngredient(ingredient));
     dispatch(setIsModalIngredientOpen(true));
   };
@@ -59,8 +62,4 @@ export const IngredientsItems = ({ ingredient }) => {
       <p className="text text_type_main-default">{name}</p>
     </div>
   );
-};
-
-IngredientsItems.propTypes = {
-  ingredient: PropTypes.shape(ingredientType.isRequired),
 };

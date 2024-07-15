@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import loginStyles from './login.module.css';
 import {
@@ -11,7 +11,7 @@ import { getIsError, getIsLoading, setIsError } from '../services/user/reducer';
 import { Preloader } from '../components/preloader/preloader';
 import { useForm } from '../hooks/useform';
 
-export function LoginPage() {
+export function LoginPage(): JSX.Element {
   const { values, handleChange, error } = useForm({
     email: '',
     password: '',
@@ -19,8 +19,8 @@ export function LoginPage() {
   const dispatch = useDispatch();
   const isError = useSelector(getIsError);
   const isLoading = useSelector(getIsLoading);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (error.email !== '' || error.password !== '') {
@@ -30,19 +30,22 @@ export function LoginPage() {
     }
   }, [error]);
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     handleChange(e);
   };
 
-  const handleIconClick = () => {
+  const handleIconClick = (): void => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     console.log(values);
     e.preventDefault();
-    dispatch(login(values));
+    if (values.email && values.password) {
+      //@ts-ignore
+      dispatch(login({ email: values.email, password: values.password }));
+    }
   };
 
   return isLoading ? (
@@ -54,28 +57,32 @@ export function LoginPage() {
       </h1>
       <form className={`${loginStyles.form} mb-6`} onSubmit={handleSubmit}>
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           extraClass="mb-6"
           placeholder="e-mail"
           type="email"
           name="email"
-          value={values.email}
-          errorText={error.email}
+          value={values?.email || ''}
+          errorText={error?.email || ''}
           required
           onChange={handleInput}
           {...(error.email && { error: true })}
         />
         <Input
+          onPointerEnterCapture
+          onPointerLeaveCapture
           {...(showPassword ? { icon: 'HideIcon' } : { icon: 'ShowIcon' })}
           extraClass="mb-6"
           {...(showPassword ? { type: 'text' } : { type: 'password' })}
           placeholder="Пароль"
           name="password"
-          value={values.password}
+          value={values?.password || ''}
           onChange={handleInput}
           onIconClick={handleIconClick}
           required
           minLength={6}
-          errorText={error.password}
+          errorText={error?.password || ''}
           {...(error.password && { error: true })}
         />
         {isError && (

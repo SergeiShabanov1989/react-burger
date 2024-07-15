@@ -3,10 +3,11 @@ import { useDispatch } from 'react-redux';
 import userStyles from './user.module.css';
 import { logout } from '../services/user/actions';
 
-export function UserPage() {
+export function UserPage(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-  const handleLogout = () => {
+  const handleLogout = (): void => {
+    // @ts-ignore
     dispatch(logout());
   };
   return (
