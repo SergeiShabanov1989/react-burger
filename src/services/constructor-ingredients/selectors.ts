@@ -1,7 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { TConstructorIngredient } from '../../components/utils/types';
+import { RootState } from '../reducer';
 
 export const ingredientsPriceSelector = createSelector(
-  (state) => state.constructorIngredients,
+  (state: RootState) => state.constructorIngredients,
   (constructorIngredients) => {
     let sum = 0;
     if (
@@ -9,7 +11,7 @@ export const ingredientsPriceSelector = createSelector(
       constructorIngredients.constructorIngredients.length !== 0
     ) {
       sum = constructorIngredients.constructorIngredients.reduce(
-        (acc, number) => acc + number.price,
+        (acc: number, number: TConstructorIngredient) => acc + number.price,
         constructorIngredients.buns.price * 2
       );
     }

@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+export type TOrderDetailsState = {
+  IsModalOpen: boolean;
+};
+
+const initialState: TOrderDetailsState = {
   IsModalOpen: false,
 };
 

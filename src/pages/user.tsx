@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../services/reducer';
 import userStyles from './user.module.css';
 import { logout } from '../services/user/actions';
 
@@ -7,7 +7,6 @@ export function UserPage(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const handleLogout = (): void => {
-    // @ts-ignore
     dispatch(logout());
   };
   return (

@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../services/reducer';
 import {
   Button,
   Input,
@@ -9,10 +9,10 @@ import { updateUserProfile } from '../services/user/actions';
 import { getIsLoading } from '../services/user/reducer';
 import { Preloader } from '../components/preloader/preloader';
 import { useForm } from '../hooks/useform';
+import { RootState } from '../services/reducer';
 
 export function ProfilePage(): JSX.Element {
-  // @ts-ignore
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const isLoading = useSelector(getIsLoading);
   const dispatch = useDispatch();
   const { values, handleChange, error, setError, setValues } = useForm({
@@ -34,7 +34,7 @@ export function ProfilePage(): JSX.Element {
   }, [user, setValues]);
 
   useEffect(() => {
-    if (user.email === values.email && user.name === values.name) {
+    if (user?.email === values.email && user?.name === values.name) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
@@ -54,7 +54,6 @@ export function ProfilePage(): JSX.Element {
     e.preventDefault();
     if (values.name || values.email || values.password) {
       dispatch(
-        // @ts-ignore
         updateUserProfile({
           name: values.name,
           email: values.email,
@@ -80,7 +79,7 @@ export function ProfilePage(): JSX.Element {
           type="text"
           {...(isInputDisabled && { icon: 'EditIcon' })}
           name="name"
-          value={values.name || user?.name}
+          value={values.name || user?.name || ''}
           onIconClick={handleIconClick}
           onChange={handleInput}
           {...(error.name && { error: true })}
@@ -95,7 +94,7 @@ export function ProfilePage(): JSX.Element {
           placeholder="Логин"
           type="email"
           name="email"
-          value={values.email || user?.email}
+          value={values.email || user?.email || ''}
           errorText={error?.email || ''}
           onIconClick={handleIconClick}
           onChange={handleInput}
@@ -126,7 +125,7 @@ export function ProfilePage(): JSX.Element {
               type="button"
               onClick={() => {
                 setInputDisabled(true);
-                setValues({ name: user.name, email: user.email, password: '' });
+                setValues({ name: user?.name, email: user?.email, password: '' });
                 setError({ name: '', email: '', password: '', token: '' });
               }}
             >

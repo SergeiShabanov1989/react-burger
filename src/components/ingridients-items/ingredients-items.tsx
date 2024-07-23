@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/reducer';
 import { useDrag } from 'react-dnd';
 import {
   CurrencyIcon,
@@ -19,7 +19,6 @@ export const IngredientsItems = ({
 }): React.JSX.Element => {
   const dispatch = useDispatch();
   const { constructorIngredients, buns } = useSelector(
-    // @ts-ignore
     (state) => state.constructorIngredients
   );
   const [, dragRef] = useDrag({

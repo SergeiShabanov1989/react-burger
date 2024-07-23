@@ -1,7 +1,14 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { sendOrder } from './actions';
+import { TConstructorIngredient, TOrder } from '../../components/utils/types';
 
-const initialState = {
+export type TConstructorIngredientState = {
+  buns: TConstructorIngredient | null;
+  constructorIngredients: TConstructorIngredient[];
+  order: TOrder | null;
+};
+
+export const initialState: TConstructorIngredientState = {
   buns: null,
   constructorIngredients: [],
   order: null,
@@ -13,7 +20,7 @@ export const constructorIngredientsSlice = createSlice({
   selectors: {
     getAllIngredients: (state) => state.order,
   },
-  
+
   extraReducers: (builder) => {
     builder
       .addCase(sendOrder.fulfilled, (state, action) => {
@@ -28,7 +35,7 @@ export const constructorIngredientsSlice = createSlice({
   },
   reducers: {
     setConstructorIngredients: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type !== 'bun') {
           state.constructorIngredients = [
             ...state.constructorIngredients,
@@ -40,20 +47,25 @@ export const constructorIngredientsSlice = createSlice({
           state.buns = action.payload;
         }
       },
-      prepare: (constructorIngredients) => {
-        return { payload: { ...constructorIngredients, key: nanoid() } };
+      prepare: (constructorIngredients: TConstructorIngredient) => {
+        return { payload: { ...constructorIngredients, key: nanoid() }, type: 'setConstructorIngredients' };
       },
     },
     deleteIngredients: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<string>) => {
         state.constructorIngredients = state.constructorIngredients.filter(
-          (ingredient) => ingredient.key !== action.payload
+          (ingredient: TConstructorIngredient) =>
+            ingredient.key !== action.payload
         );
       },
+      prepare: (payload: string) => ({ payload }),
     },
     moveIngredient: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<Array<TConstructorIngredient>>) => {
         state.constructorIngredients = action.payload;
+      },
+      prepare: (payload: Array<TConstructorIngredient>) => {
+        return { payload };
       },
     },
   },
@@ -61,3 +73,5 @@ export const constructorIngredientsSlice = createSlice({
 
 export const { setConstructorIngredients, deleteIngredients, moveIngredient } =
   constructorIngredientsSlice.actions;
+
+export type TWsInternalActions = ReturnType<typeof constructorIngredientsSlice.actions[keyof typeof constructorIngredientsSlice.actions]>;

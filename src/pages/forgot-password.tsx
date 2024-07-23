@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import forgotStyles from './forgot-password.module.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../services/reducer';
 import {
   Button,
   Input,

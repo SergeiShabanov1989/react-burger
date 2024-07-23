@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/reducer';
 import { useDrag, useDrop } from 'react-dnd';
 import {
   ConstructorElement,
@@ -28,7 +28,6 @@ export const ConstructorIngredients = ({
   const ref = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
   const { constructorIngredients } = useSelector(
-    // @ts-ignore
     (state) => state.constructorIngredients
   );
   const [, drag] = useDrag<Pick <TConstructorIngredients, 'id' | 'index'>, unknown>({

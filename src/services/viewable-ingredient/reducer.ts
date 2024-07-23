@@ -1,4 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { TIngredient } from '../../components/utils/types';
+
+export type TViewableIngredientState = {
+  viewableIngredient: TIngredient | null;
+  IsModalOpen: boolean;
+};
 
 const initialState = {
   viewableIngredient: null,

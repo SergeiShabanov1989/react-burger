@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/reducer';
 import { useParams } from 'react-router-dom';
 import ingredientDetailsStyles from './ingredient-details.module.css';
 import { Preloader } from '../preloader/preloader';
@@ -6,15 +6,16 @@ import { TIngredient } from '../utils/types';
 
 export const IngredientDetails = (): JSX.Element => {
   const { viewableIngredient } = useSelector(
-    // @ts-ignore
     (state) => state.viewableIngredient
   );
   const { id = '' } = useParams();
-  // @ts-ignore
   const { ingredients, isLoading } = useSelector((state) => state.ingredients);
 
   const getIngredientById = (id: string): TIngredient => {
-    return ingredients.find((ingredient: TIngredient) => ingredient._id === id);
+    const foundIngredient = ingredients.find(
+      (ingredient: TIngredient) => ingredient._id === id
+    );
+    return foundIngredient || ({} as TIngredient);
   };
 
   const ingredient = viewableIngredient

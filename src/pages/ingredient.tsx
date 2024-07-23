@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '../services/reducer';
 import { useParams } from 'react-router-dom';
 import { Preloader } from '../components/preloader/preloader';
 import { TIngredient } from '../components/utils/types';
@@ -7,7 +7,6 @@ import ingredientStyles from './ingredient.module.css';
 
 export const IngredientPage = () => {
   const { id } = useParams();
-  //@ts-ignore
   const { ingredients, isLoading } = useSelector((state) => state.ingredients);
   const getIngredientById = (id: string) => {
     return ingredients.find((ingredient: TIngredient): boolean => ingredient._id === id);

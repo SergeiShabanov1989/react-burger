@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../services/reducer';
 import { useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AppHeader } from '../app-header/app-header';
@@ -28,12 +28,10 @@ function App(): React.JSX.Element {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(checkUserAuth());
   }, [dispatch]);
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(getIngredients());
   }, []);
 
