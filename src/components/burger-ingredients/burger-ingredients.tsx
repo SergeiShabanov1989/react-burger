@@ -1,5 +1,5 @@
 import { useState, useRef, UIEvent } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/reducer';
 import { Link, useLocation } from 'react-router-dom';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientsItems } from '../ingridients-items/ingredients-items';

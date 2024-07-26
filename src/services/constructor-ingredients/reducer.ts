@@ -48,7 +48,10 @@ export const constructorIngredientsSlice = createSlice({
         }
       },
       prepare: (constructorIngredients: TConstructorIngredient) => {
-        return { payload: { ...constructorIngredients, key: nanoid() }, type: 'setConstructorIngredients' };
+        return {
+          payload: { ...constructorIngredients, key: nanoid() },
+          type: 'setConstructorIngredients',
+        };
       },
     },
     deleteIngredients: {
@@ -61,7 +64,10 @@ export const constructorIngredientsSlice = createSlice({
       prepare: (payload: string) => ({ payload }),
     },
     moveIngredient: {
-      reducer: (state, action: PayloadAction<Array<TConstructorIngredient>>) => {
+      reducer: (
+        state,
+        action: PayloadAction<Array<TConstructorIngredient>>
+      ) => {
         state.constructorIngredients = action.payload;
       },
       prepare: (payload: Array<TConstructorIngredient>) => {
@@ -74,4 +80,6 @@ export const constructorIngredientsSlice = createSlice({
 export const { setConstructorIngredients, deleteIngredients, moveIngredient } =
   constructorIngredientsSlice.actions;
 
-export type TWsInternalActions = ReturnType<typeof constructorIngredientsSlice.actions[keyof typeof constructorIngredientsSlice.actions]>;
+export type TConstructorIngredientsActions = ReturnType<
+  (typeof constructorIngredientsSlice.actions)[keyof typeof constructorIngredientsSlice.actions]
+>;

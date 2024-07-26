@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient } from '../../components/utils/types';
 
 export type TViewableIngredientState = {
@@ -6,7 +6,7 @@ export type TViewableIngredientState = {
   IsModalOpen: boolean;
 };
 
-const initialState = {
+const initialState: TViewableIngredientState = {
   viewableIngredient: null,
   IsModalOpen: false,
 };
@@ -15,10 +15,10 @@ export const viewableIngredientSlice = createSlice({
   name: 'viewableIngredient',
   initialState,
   reducers: {
-    setViewableIngredient: (state, action) => {
+    setViewableIngredient: (state, action: PayloadAction<TIngredient>) => {
       state.viewableIngredient = action.payload;
     },
-    setIsModalIngredientOpen: (state, action) => {
+    setIsModalIngredientOpen: (state, action: PayloadAction<boolean>) => {
       state.IsModalOpen = action.payload;
     },
   },
@@ -26,3 +26,7 @@ export const viewableIngredientSlice = createSlice({
 
 export const { setViewableIngredient, setIsModalIngredientOpen } =
   viewableIngredientSlice.actions;
+
+export type TViewableIngredientActions = ReturnType<
+  (typeof viewableIngredientSlice.actions)[keyof typeof viewableIngredientSlice.actions]
+>;

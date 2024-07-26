@@ -90,3 +90,10 @@ export type TLoginUser = {
   email: string;
   password: string;
 };
+
+export type TOrders = {
+  success?: boolean;
+  orders: TOrder[];
+  total: number | null;
+  totalToday: number | null;
+}

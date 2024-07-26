@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/reducer';
 import { useLocation, Navigate } from 'react-router-dom';
 import {
   getIsAuthChecked,

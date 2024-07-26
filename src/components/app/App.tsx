@@ -9,8 +9,11 @@ import { ForgotPage } from '../../pages/forgot-password';
 import { ResetPage } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile';
 import { OrdersPage } from '../../pages/orders';
+import { FeedInfoPage } from '../../pages/feed-info';
 import { UserPage } from '../../pages/user';
 import { IngredientPage } from '../../pages/ingredient';
+import { FeedPage } from '../../pages/feed';
+import { OrderInfo } from '../../components/order-info/order-info';
 import { Modal } from '../modal/modal';
 import { checkUserAuth } from '../../services/user/actions';
 import { getIngredients } from '../../services/burger-ingredients/actions';
@@ -21,6 +24,7 @@ import {
   OnlyAuthorized,
   OnlyAfterEmailCheck,
 } from '../protected-route/protected-route';
+import { wsConnect } from '../../services/orders-info/actions';
 
 function App(): React.JSX.Element {
   const navigate = useNavigate();
@@ -33,6 +37,10 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     dispatch(getIngredients());
+  }, []);
+
+  useEffect(() => {
+    dispatch(wsConnect('wss://norma.nomoreparties.space/orders/all'));
   }, []);
 
   const onclose = (): void => {
@@ -49,6 +57,15 @@ function App(): React.JSX.Element {
           <Route index element={<HomePage />} />
           <Route path="/ingredients/:id" element={<IngredientPage />} />
         </Route>
+        <Route
+          path="/feed/:id"
+          element={<OnlyUnAuthorized component={<FeedInfoPage />} />}
+        />
+        <Route
+          path="/feed"
+          element={<OnlyUnAuthorized component={<FeedPage />} />}
+        />
+
         <Route
           path="login"
           element={<OnlyUnAuthorized component={<LoginPage />} />}
@@ -87,6 +104,18 @@ function App(): React.JSX.Element {
             element={
               <Modal onClose={onclose}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      {state?.backgroundLocation && location.hash === '#order-info' && (
+        <Routes>
+          <Route
+            path="feed/:id"
+            element={
+              <Modal onClose={onclose}>
+                <OrderInfo />
               </Modal>
             }
           />

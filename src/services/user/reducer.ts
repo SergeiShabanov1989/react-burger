@@ -92,3 +92,8 @@ export const {
   getIsError,
   getIsLoading,
 } = userSlice.selectors;
+
+
+export type TUserActions = ReturnType<
+  (typeof userSlice.actions)[keyof typeof userSlice.actions]
+>;
