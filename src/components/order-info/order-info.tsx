@@ -33,9 +33,7 @@ export const OrderInfo = (): JSX.Element => {
     return getOrderById(id).ingredients?.includes(ingredient._id);
   });
 
-  const orderDate = order?.createdAt
-    ? new Date(order.createdAt)
-    : null;
+  const orderDate = order?.createdAt ? new Date(order.createdAt) : null;
   const arrayWithPrice = findAllIngredients.map((ingredient) => {
     if (ingredient.type === 'bun') {
       return 2 * ingredient.price;
@@ -49,11 +47,11 @@ export const OrderInfo = (): JSX.Element => {
       <h3 className="text text_type_digits-default mb-10">
         {`#${order?.number}`}{' '}
       </h3>
-      <h4 className="text text_type_main-medium">{order?.name || ''}</h4>
+      <h4 className="text text_type_main-medium mr-2">{order?.name || ''}</h4>
       <p
         className={`${orderInfoStyles.status} text text_type_main-default mb-10`}
       >{`${order?.status ? 'Выполнен' : 'Создан'}`}</p>
-      <p className="text text_type_main-medium">Состав:</p>
+      <p className="text text_type_main-medium mb-8">Состав:</p>
       <div className={`${orderInfoStyles.ingredient_container} mb-6`}>
         {findAllIngredients.map((ingredient) => (
           <div
