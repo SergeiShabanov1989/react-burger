@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../services/reducer';
 import {
   Button,
   Input,
@@ -42,7 +42,6 @@ export function RegisterPage(): JSX.Element {
     e.preventDefault();
     if (values.name && values.email && values.password) {
       dispatch(
-        // @ts-ignore
         register({
           name: values.name,
           email: values.email,

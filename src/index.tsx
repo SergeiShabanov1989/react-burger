@@ -7,11 +7,7 @@ import './index.css';
 import App from './components/app/App';
 import reportWebVitals from './reportWebVitals';
 
-import { reducer } from './services/reducer';
-
-const store = configureStore({
-  reducer,
-});
+import { store } from './services/reducer';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -33,7 +33,7 @@ export const AppHeader = (): JSX.Element => {
               </NavLink>
             </li>
             <li className={`${headerStyles.item} pb-5 pt-5`}>
-              <NavLink to="order-feed" className={`${headerStyles.link} mr-8`}>
+              <NavLink to="feed" className={`${headerStyles.link} mr-8`}>
                 {({ isActive }) => (
                   <>
                     <ListIcon

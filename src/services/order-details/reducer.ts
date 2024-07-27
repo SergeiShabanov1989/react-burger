@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+export type TOrderDetailsState = {
+  IsModalOpen: boolean;
+};
+
+const initialState: TOrderDetailsState = {
   IsModalOpen: false,
 };
 
@@ -15,3 +19,5 @@ export const orderDetailsSlice = createSlice({
 });
 
 export const { setIsModalOrderOpen } = orderDetailsSlice.actions;
+
+export type TOrderDetailsActions = ReturnType<typeof orderDetailsSlice.actions[keyof typeof orderDetailsSlice.actions]>;

@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../services/reducer';
 import { useDrop } from 'react-dnd';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -22,17 +22,15 @@ export const BurgerConstructor = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(getUser);
-  // @ts-ignore
   const { IsModalOpen } = useSelector((state) => state.orderDetails);
   const { constructorIngredients, buns } = useSelector(
-    // @ts-ignore
     (state) => state.constructorIngredients
   );
   const fullPriceIngredients = useSelector(ingredientsPriceSelector);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: ['main', 'sauce', 'bun'],
-    drop(itemId) {
+    drop(itemId: TConstructorIngredient) {
       dispatch(setConstructorIngredients(itemId));
     },
     collect: (monitor) => ({
@@ -48,8 +46,10 @@ export const BurgerConstructor = (): JSX.Element => {
       const pushOrder = constructorIngredients.map(
         (ingredient: TConstructorIngredient) => ingredient._id
       );
-      // @ts-ignore
-      dispatch(sendOrder({ ingredients: pushOrder }));
+      if (buns) {
+        const bunsPlusIngredients = [...pushOrder, buns._id];
+        dispatch(sendOrder({ ingredients: bunsPlusIngredients }));
+      }
     }
   };
 

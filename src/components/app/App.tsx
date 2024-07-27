@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../services/reducer';
 import { useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AppHeader } from '../app-header/app-header';
@@ -9,8 +9,11 @@ import { ForgotPage } from '../../pages/forgot-password';
 import { ResetPage } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile';
 import { OrdersPage } from '../../pages/orders';
+import { FeedInfoPage } from '../../pages/feed-info';
 import { UserPage } from '../../pages/user';
 import { IngredientPage } from '../../pages/ingredient';
+import { FeedPage } from '../../pages/feed';
+import { OrderInfo } from '../../components/order-info/order-info';
 import { Modal } from '../modal/modal';
 import { checkUserAuth } from '../../services/user/actions';
 import { getIngredients } from '../../services/burger-ingredients/actions';
@@ -28,12 +31,10 @@ function App(): React.JSX.Element {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(checkUserAuth());
   }, [dispatch]);
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(getIngredients());
   }, []);
 
@@ -51,6 +52,11 @@ function App(): React.JSX.Element {
           <Route index element={<HomePage />} />
           <Route path="/ingredients/:id" element={<IngredientPage />} />
         </Route>
+        <Route path="/feed">
+          <Route index element={<FeedPage />} />
+          <Route path="/feed/:id" element={<FeedInfoPage />} />
+        </Route>
+
         <Route
           path="login"
           element={<OnlyUnAuthorized component={<LoginPage />} />}
@@ -81,6 +87,10 @@ function App(): React.JSX.Element {
             element={<OnlyAuthorized component={<OrdersPage />} />}
           />
         </Route>
+        <Route
+          path="user/orders/:id"
+          element={<OnlyAuthorized component={<FeedInfoPage />} />}
+        />
       </Routes>
       {state?.backgroundLocation && location.hash === '#modal-ingredient' && (
         <Routes>
@@ -89,6 +99,30 @@ function App(): React.JSX.Element {
             element={
               <Modal onClose={onclose}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      {state?.backgroundLocation && location.hash === '#order-info' && (
+        <Routes>
+          <Route
+            path="feed/:id"
+            element={
+              <Modal onClose={onclose}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      {state?.backgroundLocation && location.hash === '#user-order' && (
+        <Routes>
+          <Route
+            path="/user/orders/:id"
+            element={
+              <Modal onClose={onclose}>
+                <OrderInfo />
               </Modal>
             }
           />

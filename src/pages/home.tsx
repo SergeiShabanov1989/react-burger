@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../services/reducer';
 import homeStyles from './home.module.css';
 import { Main } from '../components/main/main';
 import { getIngredientsFromServer } from '../components/utils/api';
@@ -8,11 +8,9 @@ import { Preloader } from '../components/preloader/preloader';
 
 export function HomePage() {
   const dispatch = useDispatch();
-  //@ts-ignore
   const { isError, isLoading } = useSelector((store) => store.ingredients);
 
   useEffect(() => {
-    //@ts-ignore
     dispatch(getIngredients());
   }, []);
 

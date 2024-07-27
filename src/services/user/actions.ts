@@ -8,17 +8,26 @@ import {
   updateUser,
   refreshToken,
 } from '../../components/utils/api';
+import {
+  TRegisterUser,
+  TLoginUser,
+  TUpdateUser,
+  TResponse,
+} from '../../components/utils/types';
 
 export const register = createAsyncThunk(
   'user/registerUser',
-  async (formValue) => {
+  async (formValue: TRegisterUser) => {
     return await registerUser(formValue);
   }
 );
 
-export const login = createAsyncThunk('user/loginUser', async (formValue) => {
-  return await loginUser(formValue);
-});
+export const login = createAsyncThunk(
+  'user/loginUser',
+  async (formValue: TLoginUser) => {
+    return await loginUser(formValue);
+  }
+);
 
 export const checkUserAuth = createAsyncThunk(
   'user/checkUserAuth',
@@ -26,9 +35,7 @@ export const checkUserAuth = createAsyncThunk(
     if (localStorage.getItem('token')) {
       return getUser()
         .then((data) => {
-          if (data.success) {
             return dispatch(setUser(data));
-          }
         })
         .catch((err) => {
           if (!err.success) {
@@ -52,20 +59,22 @@ export const checkUserAuth = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk(
   'user/updateUserProfile',
-  async (formValue, { dispatch }) => {
-    await updateUser(formValue).then((data)=>{
-      dispatch(setUser(data));
-    }).catch((err) => {
-      if (!err.success) {
-        dispatch(setIsLoading(true));
-        refreshToken().then(() => {
-          updateUser(formValue).then((data) => {
-            dispatch(setUser(data));
-            dispatch(setIsLoading(false));
+  async (formValue: TUpdateUser, { dispatch }) => {
+    await updateUser(formValue)
+      .then((data) => {
+          dispatch(setUser(data));
+      })
+      .catch((err) => {
+        if (!err.success) {
+          dispatch(setIsLoading(true));
+          refreshToken().then(() => {
+            updateUser(formValue).then((data) => {
+              dispatch(setUser(data));
+              dispatch(setIsLoading(false));
+            });
           });
-        });
-      }
-    });
+        }
+      });
     return updateUser(formValue);
   }
 );

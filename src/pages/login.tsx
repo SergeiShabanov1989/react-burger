@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../services/reducer';
 import loginStyles from './login.module.css';
 import {
   Button,
@@ -40,10 +40,8 @@ export function LoginPage(): JSX.Element {
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    console.log(values);
     e.preventDefault();
     if (values.email && values.password) {
-      //@ts-ignore
       dispatch(login({ email: values.email, password: values.password }));
     }
   };

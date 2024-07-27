@@ -1,0 +1,65 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  
+  
+  width: 1280px;
+}
+
+.feed_container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.info_container {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.container {
+  width: 600px;
+  height: 750px;
+  overflow: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.progress_container {
+  display: flex;
+  flex-direction: row;
+}
+
+.progress {
+  width: 200px;
+}
+
+.items_container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.digits {
+  color: #00CCCC;
+}
+
+.period_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}

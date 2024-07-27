@@ -1,7 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { register, logout, login } from './actions';
+import { TUser } from '../../components/utils/types';
 
-const initialState = {
+export type TUserState = {
+  user?: TUser | null;
+  isAuthChecked: boolean;
+  isEmailChecked: boolean;
+  isError: boolean;
+  isLoading: boolean;
+};
+
+const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
   isEmailChecked: false,
@@ -14,7 +23,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload.user;
+      state.user = action.payload;
     },
     setIsAuthChecked: (state, action) => {
       state.isAuthChecked = action.payload;
@@ -61,7 +70,7 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
         state.isAuthChecked = true;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(login.rejected, (state) => {
         state.user = null;
         state.isAuthChecked = true;
         state.isError = true;
@@ -83,3 +92,8 @@ export const {
   getIsError,
   getIsLoading,
 } = userSlice.selectors;
+
+
+export type TUserActions = ReturnType<
+  (typeof userSlice.actions)[keyof typeof userSlice.actions]
+>;
