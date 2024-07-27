@@ -46,7 +46,10 @@ export const BurgerConstructor = (): JSX.Element => {
       const pushOrder = constructorIngredients.map(
         (ingredient: TConstructorIngredient) => ingredient._id
       );
-      dispatch(sendOrder({ ingredients: pushOrder }));
+      if (buns) {
+        const bunsPlusIngredients = [...pushOrder, buns._id];
+        dispatch(sendOrder({ ingredients: bunsPlusIngredients }));
+      }
     }
   };
 

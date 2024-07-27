@@ -45,7 +45,7 @@ export const sendOrderToServer = async (
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
     body: JSON.stringify(order),
   });
@@ -183,5 +183,20 @@ export const resetPassword = async (
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(formValue),
+  });
+};
+
+export const getOrderFromServer = async (id: string): Promise<TOrder> => {
+  return request<TResponse>(`${BASE_URL}/orders/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  }).then((data) => {
+    if (data && data.orders) {
+      return data.orders;
+    }
+    return {} as TOrder;
   });
 };

@@ -25,7 +25,6 @@ import {
   OnlyAfterEmailCheck,
 } from '../protected-route/protected-route';
 
-
 function App(): React.JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,8 +37,6 @@ function App(): React.JSX.Element {
   useEffect(() => {
     dispatch(getIngredients());
   }, []);
-
-  
 
   const onclose = (): void => {
     dispatch(setIsModalIngredientOpen(false));
@@ -90,6 +87,10 @@ function App(): React.JSX.Element {
             element={<OnlyAuthorized component={<OrdersPage />} />}
           />
         </Route>
+        <Route
+          path="user/orders/:id"
+          element={<OnlyAuthorized component={<FeedInfoPage />} />}
+        />
       </Routes>
       {state?.backgroundLocation && location.hash === '#modal-ingredient' && (
         <Routes>
@@ -107,6 +108,18 @@ function App(): React.JSX.Element {
         <Routes>
           <Route
             path="feed/:id"
+            element={
+              <Modal onClose={onclose}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      {state?.backgroundLocation && location.hash === '#user-order' && (
+        <Routes>
+          <Route
+            path="/user/orders/:id"
             element={
               <Modal onClose={onclose}>
                 <OrderInfo />

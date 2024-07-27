@@ -47,7 +47,6 @@ export const socketMiddleware = (
       if (connect?.match(action)) {
         url = action.payload;
         accessToken = localStorage.getItem('token');
-        console.log(accessToken)
         socket = new WebSocket(`${url}?token=${accessToken}`);
         isConnected = true;
         if (onConnecting) {
@@ -74,10 +73,8 @@ export const socketMiddleware = (
               withTokenRefresh &&
               parsedData.message === 'Invalid or missing token'
             ) {
-              console.log(`qqweqwe`)
               refreshToken()
                 .then((refreshData) => {
-                  console.log(`qqweqwe`)
                   if (refreshData && refreshData.accessToken) {
                     const wssUrl = new URL(url);
                     wssUrl.searchParams.set(

@@ -9,6 +9,9 @@ import { Preloader } from '../components/preloader/preloader';
 import { getViewableOrder } from '../services/viewable-order/reducer';
 import { getAllIngredients } from '../services/burger-ingredients/reducer';
 import { getOrders } from '../services/orders-info/reducer';
+import { getProfileOrders } from '../services/orders-profile-info/reducer';
+import { getOrder } from '../services/order/reducer';
+import { orderFromServer } from '../services/order/actions';
 import { TOrder } from '../components/utils/types';
 import { wsConnect, wsDisconnect } from '../services/orders-info/actions';
 
@@ -19,32 +22,35 @@ export const FeedInfoPage = (): JSX.Element => {
   const allIngredients = useSelector(getAllIngredients);
   const { isLoading } = useSelector((state) => state.ingredients);
   const orders = useSelector(getOrders);
+  const orderApi = useSelector(getOrder);
   const { id = '' } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(wsConnect('wss://norma.nomoreparties.space/orders/all'));
+    dispatch(orderFromServer(id));
+
     return () => {
       dispatch(wsDisconnect());
-      console.log('ws-disconnect');
     };
   }, [dispatch]);
-
-  
 
   const getOrderById = (id: string): TOrder => {
     const foundIngredient = orders.find((order: TOrder) => order._id === id);
     return foundIngredient || ({} as TOrder);
   };
 
-  const order = viewableOrder ? viewableOrder : getOrderById(id);
+  const order = orderApi || viewableOrder ? orderApi || viewableOrder : getOrderById(id);
 
   const findAllIngredients = allIngredients.filter((ingredient) => {
+    if (orderApi) {
+      return orderApi.ingredients?.includes(ingredient._id);
+    }
     return getOrderById(id).ingredients?.includes(ingredient._id);
   });
 
-  const orderDate = viewableOrder?.createdAt
-    ? new Date(viewableOrder.createdAt)
+  const orderDate = order?.createdAt
+    ? new Date(order.createdAt)
     : null;
   const arrayWithPrice = findAllIngredients.map((ingredient) => {
     if (ingredient.type === 'bun') {
@@ -59,7 +65,9 @@ export const FeedInfoPage = (): JSX.Element => {
   ) : (
     <div className={`${feedInfoStyles.order_wrapper} mt-15 mb-15 ml-8`}>
       <div className={`${feedInfoStyles.container} mb-15`}>
-        <h3 className={`${feedInfoStyles.number} text text_type_digits-default mb-10`}>
+        <h3
+          className={`${feedInfoStyles.number} text text_type_digits-default mb-10`}
+        >
           {`#${order?.number}`}
         </h3>
         <h4 className="text text_type_main-medium">{order?.name || ''}</h4>

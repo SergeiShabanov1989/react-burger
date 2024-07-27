@@ -4,10 +4,10 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from '../../services/reducer';
 import { useParams } from 'react-router-dom';
-import { Preloader } from '../preloader/preloader';
 import { getViewableOrder } from '../../services/viewable-order/reducer';
 import { getAllIngredients } from '../../services/burger-ingredients/reducer';
 import { getOrders } from '../../services/orders-info/reducer';
+import { getProfileOrders } from '../../services/orders-profile-info/reducer';
 import { TOrder } from '../utils/types';
 
 import orderInfoStyles from './order-info.module.css';
@@ -16,11 +16,15 @@ export const OrderInfo = (): JSX.Element => {
   const viewableOrder = useSelector(getViewableOrder);
   const allIngredients = useSelector(getAllIngredients);
   const orders = useSelector(getOrders);
+  const profileOrders = useSelector(getProfileOrders);
   const { id = '' } = useParams();
 
   const getOrderById = (id: string): TOrder => {
     const foundIngredient = orders.find((order: TOrder) => order._id === id);
-    return foundIngredient || ({} as TOrder);
+    const foundProfileOrder = profileOrders.find(
+      (order: TOrder) => order._id === id
+    );
+    return foundIngredient || foundProfileOrder || ({} as TOrder);
   };
 
   const order = viewableOrder ? viewableOrder : getOrderById(id);
@@ -29,8 +33,8 @@ export const OrderInfo = (): JSX.Element => {
     return getOrderById(id).ingredients?.includes(ingredient._id);
   });
 
-  const orderDate = viewableOrder?.createdAt
-    ? new Date(viewableOrder.createdAt)
+  const orderDate = order?.createdAt
+    ? new Date(order.createdAt)
     : null;
   const arrayWithPrice = findAllIngredients.map((ingredient) => {
     if (ingredient.type === 'bun') {
@@ -40,9 +44,7 @@ export const OrderInfo = (): JSX.Element => {
   });
   const totalPrice = arrayWithPrice.reduce((a, b) => a + b, 0);
 
-  return orders.length === 0 ? (
-    <Preloader />
-  ) : (
+  return (
     <div className={`${orderInfoStyles.order_wrapper} mt-15 mb-15 ml-8`}>
       <h3 className="text text_type_digits-default mb-10">
         {`#${order?.number}`}{' '}

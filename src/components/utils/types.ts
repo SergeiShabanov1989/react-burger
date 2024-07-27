@@ -57,6 +57,7 @@ export type TResponse = {
   refreshToken?: string;
   data?: TIngredient[];
   user?: TUser;
+  orders?: TOrder;
 };
 
 export type TResponseBody = {

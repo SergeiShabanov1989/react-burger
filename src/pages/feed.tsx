@@ -26,7 +26,6 @@ export const FeedPage = (): JSX.Element => {
     dispatch(wsConnect('wss://norma.nomoreparties.space/orders/all'));
     return () => {
       dispatch(wsDisconnect());
-      console.log('ws-disconnect');
     };
   }, [dispatch]);
 

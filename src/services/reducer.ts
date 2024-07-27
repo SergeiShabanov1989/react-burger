@@ -12,6 +12,7 @@ import { viewableIngredientSlice } from './viewable-ingredient/reducer';
 import { orderDetailsSlice } from './order-details/reducer';
 import { constructorIngredientsSlice } from './constructor-ingredients/reducer';
 import { userSlice } from './user/reducer';
+import {orderSlice} from './order/reducer';
 import { orderInfoSlice } from './orders-info/reducer';
 import { orderProfileInfoSlice } from './orders-profile-info/reducer';
 import { viewableOrderSlice } from './viewable-order/reducer';
@@ -21,6 +22,7 @@ import { TOrderDetailsActions } from './order-details/reducer';
 import { TConstructorIngredientsActions } from './constructor-ingredients/reducer';
 import { TOrderInfoActions } from './orders-info/reducer';
 import { TOrderProfileInfoActions } from './orders-profile-info/reducer';
+import {TOrderActions} from './order/reducer';
 import { TViewableOrderActions } from './viewable-order/reducer';
 import { socketMiddleware } from './middleware/socket-middleware';
 import { wsError, wsMessage } from './orders-info/reducer';
@@ -64,6 +66,7 @@ export const reducer = combineReducers({
   [orderInfoSlice.reducerPath]: orderInfoSlice.reducer,
   [viewableOrderSlice.reducerPath]: viewableOrderSlice.reducer,
   [orderProfileInfoSlice.reducerPath]: orderProfileInfoSlice.reducer,
+  [orderSlice.reducerPath]: orderSlice.reducer,
 });
 
 export const store = configureStore({
@@ -82,7 +85,8 @@ type TApplicationActions =
   | TWsExternalActions
   | TViewableOrderActions
   | TOrderProfileInfoActions
-  | TWsProfileExternalActions;
+  | TWsProfileExternalActions
+  | TOrderActions;
 
 export type RootState = ReturnType<typeof reducer>;
 export type AppDispatch = ThunkDispatch<
