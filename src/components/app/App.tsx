@@ -24,7 +24,7 @@ import {
   OnlyAuthorized,
   OnlyAfterEmailCheck,
 } from '../protected-route/protected-route';
-import { wsConnect } from '../../services/orders-info/actions';
+
 
 function App(): React.JSX.Element {
   const navigate = useNavigate();
@@ -39,9 +39,7 @@ function App(): React.JSX.Element {
     dispatch(getIngredients());
   }, []);
 
-  useEffect(() => {
-    dispatch(wsConnect('wss://norma.nomoreparties.space/orders/all'));
-  }, []);
+  
 
   const onclose = (): void => {
     dispatch(setIsModalIngredientOpen(false));
@@ -57,14 +55,10 @@ function App(): React.JSX.Element {
           <Route index element={<HomePage />} />
           <Route path="/ingredients/:id" element={<IngredientPage />} />
         </Route>
-        <Route
-          path="/feed/:id"
-          element={<OnlyUnAuthorized component={<FeedInfoPage />} />}
-        />
-        <Route
-          path="/feed"
-          element={<OnlyUnAuthorized component={<FeedPage />} />}
-        />
+        <Route path="/feed">
+          <Route index element={<FeedPage />} />
+          <Route path="/feed/:id" element={<FeedInfoPage />} />
+        </Route>
 
         <Route
           path="login"

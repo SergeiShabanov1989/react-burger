@@ -45,6 +45,7 @@ export const sendOrderToServer = async (
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`
     },
     body: JSON.stringify(order),
   });
@@ -66,7 +67,7 @@ export const refreshToken = async (): Promise<
     }
   ).then((data) => {
     if (data && data.accessToken && data.refreshToken) {
-      localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+      localStorage.setItem('token', data.accessToken.split('Bearer ')[1]);
       localStorage.setItem('refreshToken', data.refreshToken);
     }
 
@@ -88,7 +89,7 @@ export const loginUser = async (
     }
   ).then((data) => {
     if (data && data.accessToken && data.refreshToken) {
-      localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+      localStorage.setItem('token', data.accessToken.split('Bearer ')[1]);
       localStorage.setItem('refreshToken', data.refreshToken);
     }
     return data;
@@ -100,7 +101,7 @@ export const getUser = async (): Promise<TUser> => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer${localStorage.getItem('token')}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   }).then((data) => {
     if (data && data.user) {
@@ -111,13 +112,18 @@ export const getUser = async (): Promise<TUser> => {
 };
 
 export const updateUser = async (formValue: TUpdateUser): Promise<TUser> => {
-  return request(`${BASE_URL}/auth/user`, {
+  return request<TResponse>(`${BASE_URL}/auth/user`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer${localStorage.getItem('token')}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
     body: JSON.stringify(formValue),
+  }).then((data) => {
+    if (data && data.user) {
+      return data.user;
+    }
+    return {} as TUser;
   });
 };
 
@@ -135,7 +141,7 @@ export const registerUser = async (
     }
   ).then((data) => {
     if (data && data.accessToken && data.refreshToken) {
-      localStorage.setItem('token', data.accessToken.split('Bearer')[1]);
+      localStorage.setItem('token', data.accessToken.split('Bearer ')[1]);
       localStorage.setItem('refreshToken', data.refreshToken);
     }
     return data;

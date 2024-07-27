@@ -7,29 +7,23 @@ import { useParams } from 'react-router-dom';
 import { Preloader } from '../preloader/preloader';
 import { getViewableOrder } from '../../services/viewable-order/reducer';
 import { getAllIngredients } from '../../services/burger-ingredients/reducer';
-import {getOrders} from '../../services/orders-info/reducer';
+import { getOrders } from '../../services/orders-info/reducer';
 import { TOrder } from '../utils/types';
 
 import orderInfoStyles from './order-info.module.css';
 
-
 export const OrderInfo = (): JSX.Element => {
   const viewableOrder = useSelector(getViewableOrder);
   const allIngredients = useSelector(getAllIngredients);
-  const { isLoading } = useSelector((state) => state.ingredients);
   const orders = useSelector(getOrders);
   const { id = '' } = useParams();
 
   const getOrderById = (id: string): TOrder => {
-    const foundIngredient = orders.find(
-      (order: TOrder) => order._id === id
-    );
+    const foundIngredient = orders.find((order: TOrder) => order._id === id);
     return foundIngredient || ({} as TOrder);
   };
 
-  const order = viewableOrder
-    ? viewableOrder
-    : getOrderById(id);
+  const order = viewableOrder ? viewableOrder : getOrderById(id);
 
   const findAllIngredients = allIngredients.filter((ingredient) => {
     return getOrderById(id).ingredients?.includes(ingredient._id);
@@ -46,16 +40,14 @@ export const OrderInfo = (): JSX.Element => {
   });
   const totalPrice = arrayWithPrice.reduce((a, b) => a + b, 0);
 
-  return isLoading ? (
+  return orders.length === 0 ? (
     <Preloader />
   ) : (
     <div className={`${orderInfoStyles.order_wrapper} mt-15 mb-15 ml-8`}>
       <h3 className="text text_type_digits-default mb-10">
         {`#${order?.number}`}{' '}
       </h3>
-      <h4 className="text text_type_main-medium">
-        {order?.name || ''}
-      </h4>
+      <h4 className="text text_type_main-medium">{order?.name || ''}</h4>
       <p
         className={`${orderInfoStyles.status} text text_type_main-default mb-10`}
       >{`${order?.status ? 'Выполнен' : 'Создан'}`}</p>

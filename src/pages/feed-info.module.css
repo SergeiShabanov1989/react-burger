@@ -6,12 +6,16 @@
   width: 100%;
 }
 
+.number {
+  align-self: center;
+}
+
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  width: 50%;
+  width: 45%;
 }
 
 .ingredient_wrapper {
@@ -33,7 +37,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 650px;
+  width: 90%;
   overflow: scroll;
   height: 300px;
 }

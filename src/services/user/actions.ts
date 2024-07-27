@@ -35,9 +35,7 @@ export const checkUserAuth = createAsyncThunk(
     if (localStorage.getItem('token')) {
       return getUser()
         .then((data) => {
-          if (data.success) {
             return dispatch(setUser(data));
-          }
         })
         .catch((err) => {
           if (!err.success) {
@@ -64,7 +62,7 @@ export const updateUserProfile = createAsyncThunk(
   async (formValue: TUpdateUser, { dispatch }) => {
     await updateUser(formValue)
       .then((data) => {
-        dispatch(setUser(data));
+          dispatch(setUser(data));
       })
       .catch((err) => {
         if (!err.success) {

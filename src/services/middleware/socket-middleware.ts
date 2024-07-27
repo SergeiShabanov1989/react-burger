@@ -4,6 +4,8 @@ import {
   Middleware,
 } from '@reduxjs/toolkit';
 import { RootState } from '../reducer';
+import { refreshToken } from '../../components/utils/api';
+import {wsProfileConnect, wsProfileDisconnect} from '../orders-profile-info/actions';
 export type TWsActionTypes = {
   connect?: ActionCreatorWithPayload<string>;
   disconnect?: ActionCreatorWithoutPayload;
@@ -13,6 +15,7 @@ export type TWsActionTypes = {
   onClose?: ActionCreatorWithoutPayload;
   onError: ActionCreatorWithPayload<string>;
   onMessage: ActionCreatorWithPayload<any>;
+  withTokenRefresh?: boolean;
 };
 
 const RECONNECT_PERIOD = 3000;
@@ -36,13 +39,16 @@ export const socketMiddleware = (
     let isConnected = false;
     let reconnectTimer = 0;
     let url = '';
+    let accessToken = localStorage.getItem('token');
 
     return (next) => (action) => {
       const { dispatch } = store;
 
       if (connect?.match(action)) {
         url = action.payload;
-        socket = new WebSocket(url);
+        accessToken = localStorage.getItem('token');
+        console.log(accessToken)
+        socket = new WebSocket(`${url}?token=${accessToken}`);
         isConnected = true;
         if (onConnecting) {
           dispatch(onConnecting());
@@ -68,20 +74,26 @@ export const socketMiddleware = (
               withTokenRefresh &&
               parsedData.message === 'Invalid or missing token'
             ) {
-              // refreshToken()
-              //     .then(refreshData => {
-              //         const wssUrl = new URL(url);
-              //         wssUrl.searchParams.set(
-              //             "token",
-              //             refreshData.accessToken.replace("Bearer ", "")
-              //         );
-              //         dispatch({type: wsConnect, payload: wssUrl});
-              //     })
-              //     .catch(err => {
-              //         dispatch(onError((error as {message: string}).message));
-              //     });
-              //
-              // dispatch(wsDisconnect());
+              console.log(`qqweqwe`)
+              refreshToken()
+                .then((refreshData) => {
+                  console.log(`qqweqwe`)
+                  if (refreshData && refreshData.accessToken) {
+                    const wssUrl = new URL(url);
+                    wssUrl.searchParams.set(
+                      'token',
+                      refreshData.accessToken.replace('Bearer ', '')
+                    );
+                    dispatch(wsProfileConnect(wssUrl.toString()));
+                  } else {
+                    dispatch(onError('Failed to refresh token'));
+                  }
+                })
+                .catch((err) => {
+                  dispatch(onError((err as { message: string }).message));
+                });
+
+              dispatch(wsProfileDisconnect());
 
               return;
             }

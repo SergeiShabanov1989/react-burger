@@ -1,4 +1,5 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from '../services/reducer';
 import {
   getOrders,
@@ -10,6 +11,7 @@ import {
   setIsModalOrderOpen,
 } from '../services/viewable-order/reducer';
 import { FeedElement } from '../components/feed-element/feed-element';
+import { wsConnect, wsDisconnect } from '../services/orders-info/actions';
 
 import feedStyles from './feed.module.css';
 
@@ -19,12 +21,14 @@ export const FeedPage = (): JSX.Element => {
   const orders = useSelector(getOrders);
   const totalOrders = useSelector(getTotal);
   const totalToday = useSelector(getTotalToday);
-  const navigate = useNavigate();
 
-  const onclose = (): void => {
-    dispatch(setIsModalOrderOpen(false));
-    navigate(-1);
-  };
+  useEffect(() => {
+    dispatch(wsConnect('wss://norma.nomoreparties.space/orders/all'));
+    return () => {
+      dispatch(wsDisconnect());
+      console.log('ws-disconnect');
+    };
+  }, [dispatch]);
 
   const ordersReady = orders.filter((order) => order.status === 'done');
   const ordersNotReady = orders.filter((order) => order.status !== 'done');
