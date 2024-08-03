@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { orderFromServer } from './actions';
 import { TOrder } from '../../components/utils/types';
 
 export type TOrderState = {

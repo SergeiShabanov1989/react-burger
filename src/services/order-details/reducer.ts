@@ -4,7 +4,7 @@ export type TOrderDetailsState = {
   IsModalOpen: boolean;
 };
 
-const initialState: TOrderDetailsState = {
+export const initialState: TOrderDetailsState = {
   IsModalOpen: false,
 };
 

@@ -8,7 +8,7 @@ export type TOrderProfileInfo = {
   connectionError: string | null;
 };
 
-const initialState: TOrderProfileInfo = {
+export const initialState: TOrderProfileInfo = {
   orders: [],
   total: null,
   totalToday: null,

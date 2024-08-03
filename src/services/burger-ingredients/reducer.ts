@@ -8,7 +8,7 @@ export type TIngredientState = {
   isError: boolean;
 };
 
-const initialState: TIngredientState = {
+export const initialState: TIngredientState = {
   ingredients: [],
   isLoading: false,
   isError: false,

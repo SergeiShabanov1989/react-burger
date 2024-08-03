@@ -9,7 +9,6 @@ import { Preloader } from '../components/preloader/preloader';
 import { getViewableOrder } from '../services/viewable-order/reducer';
 import { getAllIngredients } from '../services/burger-ingredients/reducer';
 import { getOrders } from '../services/orders-info/reducer';
-import { getProfileOrders } from '../services/orders-profile-info/reducer';
 import { getOrder } from '../services/order/reducer';
 import { orderFromServer } from '../services/order/actions';
 import { TOrder } from '../components/utils/types';
