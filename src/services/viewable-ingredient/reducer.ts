@@ -6,7 +6,7 @@ export type TViewableIngredientState = {
   IsModalOpen: boolean;
 };
 
-const initialState: TViewableIngredientState = {
+export const initialState: TViewableIngredientState = {
   viewableIngredient: null,
   IsModalOpen: false,
 };

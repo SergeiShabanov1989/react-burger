@@ -6,7 +6,7 @@ export type TViewableOrderState = {
   IsModalOpen: boolean;
 };
 
-const initialState: TViewableOrderState = {
+export const initialState: TViewableOrderState = {
   viewableOrder: null,
   IsModalOpen: false,
 };
