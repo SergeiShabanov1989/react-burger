@@ -12,7 +12,7 @@ export const OrderDetails = (): JSX.Element => {
       ) : (
         <>
           <p
-            className={`${orderDetailsStyles.order_number} text text_type_digits-large mb-8`}
+            data-testid="order-number" className={`${orderDetailsStyles.order_number} text text_type_digits-large mb-8`}
           >
             {!order ? 0 : order.order?.number}
           </p>

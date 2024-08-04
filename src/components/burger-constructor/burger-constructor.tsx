@@ -63,7 +63,10 @@ export const BurgerConstructor = (): JSX.Element => {
         ref={dropTarget}
         className={`${ConstructorStyles.constructor_wrapper}${isHover ? ` ${ConstructorStyles.constructor_element}` : ''}`}
       >
-        <div className={`${ConstructorStyles.item_wrapper} pl-6 mb-4`}>
+        <div
+          data-testid="drop-target"
+          className={`${ConstructorStyles.item_wrapper} pl-6 mb-4`}
+        >
           {buns ? (
             <ConstructorElement
               key={buns.key}
