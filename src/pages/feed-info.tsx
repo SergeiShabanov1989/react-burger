@@ -4,15 +4,20 @@ import {
   FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector, useDispatch } from '../services/reducer';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Preloader } from '../components/preloader/preloader';
 import { getViewableOrder } from '../services/viewable-order/reducer';
 import { getAllIngredients } from '../services/burger-ingredients/reducer';
 import { getOrders } from '../services/orders-info/reducer';
 import { getOrder } from '../services/order/reducer';
+import { getProfileOrders } from '../services/orders-profile-info/reducer';
 import { orderFromServer } from '../services/order/actions';
 import { TOrder } from '../components/utils/types';
 import { wsConnect, wsDisconnect } from '../services/orders-info/actions';
+import {
+  wsProfileConnect,
+  wsProfileDisconnect,
+} from '../services/orders-profile-info/actions';
 
 import feedInfoStyles from './feed-info.module.css';
 
@@ -21,25 +26,37 @@ export const FeedInfoPage = (): JSX.Element => {
   const allIngredients = useSelector(getAllIngredients);
   const { isLoading } = useSelector((state) => state.ingredients);
   const orders = useSelector(getOrders);
+  const profileOrders = useSelector(getProfileOrders);
   const orderApi = useSelector(getOrder);
   const { id = '' } = useParams();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
-    dispatch(wsConnect('wss://norma.nomoreparties.space/orders/all'));
+    if (location.pathname.split('/')[1] === `feed`) {
+      dispatch(wsConnect('wss://norma.nomoreparties.space/orders/all'));
+    }
+
+    if (location.pathname.split('/')[1] === 'user') {
+      dispatch(wsProfileConnect(`wss://norma.nomoreparties.space/orders`));
+    }
+
     dispatch(orderFromServer(id));
 
     return () => {
       dispatch(wsDisconnect());
+      dispatch(wsProfileDisconnect());
     };
   }, [dispatch]);
 
   const getOrderById = (id: string): TOrder => {
-    const foundIngredient = orders.find((order: TOrder) => order._id === id);
+    const order = orders.length > 0 ? orders : profileOrders;
+    const foundIngredient = order.find((order: TOrder) => order._id === id);
     return foundIngredient || ({} as TOrder);
   };
 
-  const order = orderApi || viewableOrder ? orderApi || viewableOrder : getOrderById(id);
+  const order =
+    orderApi || viewableOrder ? orderApi || viewableOrder : getOrderById(id);
 
   const findAllIngredients = allIngredients.filter((ingredient) => {
     if (orderApi) {
@@ -48,9 +65,7 @@ export const FeedInfoPage = (): JSX.Element => {
     return getOrderById(id).ingredients?.includes(ingredient._id);
   });
 
-  const orderDate = order?.createdAt
-    ? new Date(order.createdAt)
-    : null;
+  const orderDate = order?.createdAt ? new Date(order.createdAt) : null;
   const arrayWithPrice = findAllIngredients.map((ingredient) => {
     if (ingredient.type === 'bun') {
       return 2 * ingredient.price;
