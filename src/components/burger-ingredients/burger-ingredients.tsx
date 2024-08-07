@@ -98,6 +98,7 @@ export const BurgerIngredients = (): JSX.Element => {
               }}
               state={{ backgroundLocation: location }}
               className={ingredientsStyles.link}
+              data-testid="bun"
             >
               <IngredientsItems key={ingredient._id} ingredient={ingredient} />
             </Link>
@@ -142,6 +143,7 @@ export const BurgerIngredients = (): JSX.Element => {
               }}
               state={{ backgroundLocation: location }}
               className={ingredientsStyles.link}
+              data-testid="sauce"
             >
               <IngredientsItems key={ingredient._id} ingredient={ingredient} />
             </Link>

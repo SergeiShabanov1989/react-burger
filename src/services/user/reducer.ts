@@ -10,7 +10,7 @@ export type TUserState = {
   isLoading: boolean;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
   isEmailChecked: false,

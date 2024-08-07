@@ -35,6 +35,7 @@ export const Modal = ({ children, onClose }: TModalProps): JSX.Element => {
           }}
         >
           <div
+            data-testid="modal-close-button"
             className={modalStyles.close_overlay}
             onClick={() => {
               onClose();

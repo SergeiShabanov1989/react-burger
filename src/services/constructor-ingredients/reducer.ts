@@ -7,6 +7,7 @@ export type TConstructorIngredientState = {
   constructorIngredients: TConstructorIngredient[];
   order: TOrder | null;
   isLoading: boolean;
+  isError: boolean;
 };
 
 export const initialState: TConstructorIngredientState = {
@@ -14,6 +15,7 @@ export const initialState: TConstructorIngredientState = {
   constructorIngredients: [],
   order: null,
   isLoading: false,
+  isError: false,
 };
 
 export const constructorIngredientsSlice = createSlice({
@@ -30,14 +32,17 @@ export const constructorIngredientsSlice = createSlice({
         state.buns = null;
         state.order = action.payload;
         state.isLoading = false;
+        state.isError = false;
       })
       .addCase(sendOrder.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
       })
       .addCase(sendOrder.rejected, (state) => {
         state.constructorIngredients = [];
         state.buns = null;
         state.isLoading = false;
+        state.isError = true;
       });
   },
   reducers: {

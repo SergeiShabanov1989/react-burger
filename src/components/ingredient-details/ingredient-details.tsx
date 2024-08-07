@@ -30,7 +30,7 @@ export const IngredientDetails = (): JSX.Element => {
     >
       <h3 className="text text_type_main-large">Детали ингредиента</h3>
       <img src={ingredient?.image_large || ''} alt={ingredient?.name || ''} />
-      <h4 className="text text_type_main-medium">{ingredient?.name || ''}</h4>
+      <h4 data-testid="ingredient-name" className="text text_type_main-medium">{ingredient?.name || ''}</h4>
       <ul className={ingredientDetailsStyles.calories_wrapper}>
         <li className={ingredientDetailsStyles.info}>
           <p className="text text_type_main-default text_color_inactive">

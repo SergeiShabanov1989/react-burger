@@ -8,6 +8,7 @@ type TModalOverlayProps = {
 export const ModalOverlay = ({ children, onClose }: TModalOverlayProps): JSX.Element => {
   return (
     <div
+      data-testid="modal-overlay"
       className={`${overlayStyles.modal_overlay}`}
       onClick={() => {
         onClose()
